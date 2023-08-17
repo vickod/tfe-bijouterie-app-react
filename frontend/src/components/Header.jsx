@@ -2,32 +2,96 @@ import {Navbar, Nav, Container} from 'react-bootstrap';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import brandLogo from '../assets/logos/logoBijouterie.png'
 import {LinkContainer} from 'react-router-bootstrap'
+//import { useState } from 'react';
+import '../assets/styles/header.css';
 const Header = () => {
+/*
+  const [isContainerVisible, setIsContainerVisible] = useState(false);
+
+  const showContainerSlide = () => {
+    setIsContainerVisible(!isContainerVisible);
+  };
+*/
+
   return (
     <header>
-        <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
-            <Container>
-                <LinkContainer to="/">
-                    <Navbar.Brand>
-                    <img src={brandLogo} alt="brand-logo"></img>
-                    V.BIJOUTERIE
-                    </Navbar.Brand>
-                </LinkContainer>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav"> 
-                    <Nav className="ms-auto">
-                        <LinkContainer to="/cart">
-                            <Nav.Link><FaShoppingCart/> Panier</Nav.Link>
-                        </LinkContainer>
-                        <LinkContainer to="/login">
-                            <Nav.Link><FaUser/>Sign in</Nav.Link>
-                        </LinkContainer>
-                    </Nav>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
+      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+        <Container>
+          <LinkContainer to="/">
+            <Navbar.Brand>
+              <img src={brandLogo} alt="brand-logo" height="30" />
+              V.BIJOUTERIE
+            </Navbar.Brand>
+          </LinkContainer>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ms-auto">
+              <LinkContainer to="/cart">
+                <Nav.Link>
+                  <FaShoppingCart /> Panier
+                </Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/login">
+                <Nav.Link>
+                  <FaUser />
+                  Sign in
+                </Nav.Link>
+              </LinkContainer>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+      {/* BOUTIQUE BUTTON */}
+     {/* 
+      <div className="button-slide">
+        <button className="boutique-button">BOUTIQUE</button>
+      </div>
+
+    {isContainerVisible && (
+
+      <div className="container-slide">
+        <div className="woman">
+          <div>
+            <img
+              className="image-slide"
+              src="img/pexels-pixabay-458766.jpg"
+              alt="woman"
+              width="300"
+            />
+          </div>
+          <div className="woman-categories">
+            <h1>Femme</h1>
+            <div>
+              <h3>Bagues</h3>
+              <h3>Boucles d'oreilles</h3>
+              <h3>Colliers et Chaines</h3>
+            </div>
+          </div>
+        </div>
+        <div className="man">
+          <div>
+            <img
+              className="image-slide"
+              src="img/man.jpg"
+              alt="man"
+              width="300"
+            />
+          </div>
+          <div className="man-categories">
+            <h1>Homme</h1>
+            <div>
+              <h3>Bagues</h3>
+              <h3>Chaines</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+     )}*/}
+
     </header>
-  )
+  );
 }
 
 export default Header

@@ -9,12 +9,12 @@ const Article = ({article}) => {
     </Link>
     <Card.Body>
         <Link to= {`/articles/${article.id}`}>
-            <Card.Title as="div">
+            <Card.Title as="div" className='titre-article'>
                 <strong>{article.nom}</strong>
             </Card.Title>
         </Link>
         <Card.Text as="h3">
-            {article.prix}
+            {article.prix}€
         </Card.Text>   
     </Card.Body>
     Article</Card>

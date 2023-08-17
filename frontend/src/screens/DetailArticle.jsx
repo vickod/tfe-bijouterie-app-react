@@ -16,12 +16,12 @@ const DetailArticle = () => {
         setArticles(data)
     }
     fetchArticles()
-  },[]);
+  },);
 
 
 
 
-  console.log(article)
+ 
   
   return (
     <>
@@ -37,10 +37,10 @@ const DetailArticle = () => {
                     </ListGroup.Item>
                 </ListGroup>
                 <ListGroup.Item>
-                       <p>${article.message}</p>
+                       <p>{article.message}</p>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                       Prix: ${article.prix}
+                       Prix: {article.prix}€
                 </ListGroup.Item>
             </Col>
             <Col md={3} >
@@ -52,7 +52,7 @@ const DetailArticle = () => {
                                     Prix: 
                                 </Col>
                                 <Col>
-                                    <strong>${article.prix}</strong> 
+                                    <strong>{article.prix}€</strong> 
                                 </Col>
                             </Row>
                         </ListGroup.Item>
@@ -62,7 +62,7 @@ const DetailArticle = () => {
                                     Status: 
                                 </Col>
                                 <Col>
-                                 {/*   <strong>{article.countInStock > 0 ? 'En stock':' Article epuisé'}</strong>*/} 
+                                 {/*   <strong>{article.countInStock > 0 ? 'Disponible':' Indisponible'}</strong>*/} 
                                 </Col>
                             </Row>
                         </ListGroup.Item>

@@ -1,43 +1,15 @@
 const express = require('express')
-const {sequelize, where} = require('sequelize')
 const router = express.Router()
-const {Article, Selection, Categorie, Bague, Taille, GuideDeTailleArticle, TypeDePierre, TypeDeMatiere, Couleur, NbCarat, ArticleAvecPierre} = require('../dev-data/schema')
+const { getAllArticles, getOneArticle } = require('../controllers/articles.Controllers')
 
 
 
-router.get("/", async (req, res, next)=>{  
-    
-    try {
-        const allArticles = await Article.findAll()
-        res.json(allArticles)
-    }
-    catch(e) {
-        console.log(e)
-    }
-   
-
-})
-router.get("/:id", async (req, res, next)=>{  
-    
-    try {
-        const article =  await Article.findByPk(req.params.id)
-        res.json(article)
-    }
-    catch(e) {
-        console.log(e)
-    }
-   
-
-})
+router.route('/')
+.get(getAllArticles);
 
 
-
-
-
-
-
-
-
+router.route('/:id')
+.get(getOneArticle);
 
 
 

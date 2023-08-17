@@ -319,7 +319,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
     await diamant.addNbCarat(diamantCt40)
     await diamant.addNbCarat(diamantCt57)
     
-    const imageBaseUrl = `${process.env.PUBLIC_URL}/img/articles`;
+    const imageBaseUrl = `/img/articles/`;
 
     //Creations des articles bague femme
     const articleFemmeBague1 = await Article.create({
