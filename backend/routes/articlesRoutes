@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { getAllArticles, getOneArticle } = require('../controllers/articles.Controllers')
+const { getAllArticles, getOneArticle} = require('../controllers/articles.Controllers')
 
 
 
