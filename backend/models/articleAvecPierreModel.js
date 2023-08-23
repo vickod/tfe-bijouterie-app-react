@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../config/db_connection");
 
-const ArticleAvecPierre = sequelize.define("articleAvecPierre", {
+const ArticleAvecPierre = sequelize.define("articlesAvecPierres", {
   id: {
     primaryKey: true,
     autoIncrement: true,

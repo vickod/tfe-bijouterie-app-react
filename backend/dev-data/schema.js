@@ -22,6 +22,7 @@ const Mesure = require('../models/mesureModel')
 const GuideDeTailleArticle = require('../models/guideDeTailleArticleModel')
 const BouclesDoreillesAvecPerle = require('../models/bouclesDoreillesAvecPerleModel')
 const CollierEtChaineAvecPerle = require('../models/collierEtChaineAvecPerleModel')
+const ArticleAvecPerle = require('../models/articleAvecPerleModel')
 
 // selection - categorie
 Selection.belongsToMany(Categorie, { through: 'selectionCategorie' ,timestamps: false }) 
@@ -138,20 +139,34 @@ GuideDeTailleArticle.belongsTo(Couleur);
 GuideDeTailleArticle.belongsTo(NbCarat);
 
 //N-AIR: BouclesDoreillesAvecPerle: boucles d'oreilles - type de perle - couleur - nb perles  
-BouclesDoreilles.hasMany(BouclesDoreillesAvecPerle);
-TypeDePerle.hasMany(BouclesDoreillesAvecPerle);
-Couleur.hasMany(BouclesDoreillesAvecPerle);
-BouclesDoreillesAvecPerle.belongsTo(BouclesDoreilles);
-BouclesDoreillesAvecPerle.belongsTo(TypeDePerle);
-BouclesDoreillesAvecPerle.belongsTo(Couleur);
+// BouclesDoreilles.hasMany(BouclesDoreillesAvecPerle);
+// TypeDePerle.hasMany(BouclesDoreillesAvecPerle);
+// Couleur.hasMany(BouclesDoreillesAvecPerle);
+// BouclesDoreillesAvecPerle.belongsTo(BouclesDoreilles);
+// BouclesDoreillesAvecPerle.belongsTo(TypeDePerle);
+// BouclesDoreillesAvecPerle.belongsTo(Couleur);
+
+Article.hasMany(ArticleAvecPerle);
+TypeDePerle.hasMany(ArticleAvecPerle);
+Couleur.hasMany(ArticleAvecPerle);
+ArticleAvecPerle.belongsTo(Article);
+ArticleAvecPerle.belongsTo(TypeDePerle);
+ArticleAvecPerle.belongsTo(Couleur);
 
 //N-AIR: CollierEtChaineAvecPerle: collier_chaine_bracelet - type de perle - couleur - nb perles  
-CollierEtChaine.hasMany(CollierEtChaineAvecPerle);
-TypeDePerle.hasMany(CollierEtChaineAvecPerle);
-Couleur.hasMany(CollierEtChaineAvecPerle);
-CollierEtChaineAvecPerle.belongsTo(CollierEtChaine);
-CollierEtChaineAvecPerle.belongsTo(TypeDePerle);
-CollierEtChaineAvecPerle.belongsTo(Couleur);
+// CollierEtChaine.hasMany(CollierEtChaineAvecPerle);
+// TypeDePerle.hasMany(CollierEtChaineAvecPerle);
+// Couleur.hasMany(CollierEtChaineAvecPerle);
+// CollierEtChaineAvecPerle.belongsTo(CollierEtChaine);
+// CollierEtChaineAvecPerle.belongsTo(TypeDePerle);
+// CollierEtChaineAvecPerle.belongsTo(Couleur);
+
+Article.hasMany(ArticleAvecPerle);
+TypeDePerle.hasMany(ArticleAvecPerle);
+Couleur.hasMany(ArticleAvecPerle);
+ArticleAvecPerle.belongsTo(Article);
+ArticleAvecPerle.belongsTo(TypeDePerle);
+ArticleAvecPerle.belongsTo(Couleur);
 
 
 module.exports = {
@@ -177,5 +192,6 @@ module.exports = {
     Mesure,
     GuideDeTailleArticle,
     BouclesDoreillesAvecPerle,
-    CollierEtChaineAvecPerle
+    CollierEtChaineAvecPerle,
+    ArticleAvecPerle
 }

@@ -21,7 +21,8 @@ const {
     Mesure,
     GuideDeTailleArticle,
     BouclesDoreillesAvecPerle,
-    CollierEtChaineAvecPerle
+    CollierEtChaineAvecPerle,
+    ArticleAvecPerle
 } = require('./schema')
 const sequelize = require('../config/db_connection')
 const { hashPassword, comparePasswords } = require('../config/password_hash');
@@ -223,21 +224,22 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         matiere: "or"
     });
     */
-    const orRose = await TypeDeMatiere.create({
-        matiere: "or rose"
-    });
-    const orJaune = await TypeDeMatiere.create({
-        matiere: "or Jaune"
+    const argent = await TypeDeMatiere.create({
+        matiere: "argent "
     });
     const orBlanc = await TypeDeMatiere.create({
-        matiere: "or Blanc"
+        matiere: "or blanc"
+    });
+    const orJaune = await TypeDeMatiere.create({
+        matiere: "or jaune"
+    });
+    const orRose = await TypeDeMatiere.create({
+        matiere: "or rose"
     });
     const orRouge = await TypeDeMatiere.create({
         matiere: "or rouge"
     });
-    const argent = await TypeDeMatiere.create({
-        matiere: "argent "
-    });
+    
 
     //Type de matiere - Nb carat
     /*
@@ -1167,39 +1169,39 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
     //_________________________________________ARTICLES AVEC PERLES _________________________________________
     
     //Creations des colliers chaines avec perle femme
-    const collierChaineAvecPerles1 = await CollierEtChaineAvecPerle.create({
+    const collierChaineAvecPerles1 = await ArticleAvecPerle.create({
         nbPerles: "48",
-        collierEtChaineId: CollierEtChaine3.id,
+        articleId: CollierEtChaine3.articleId,
         typeDePerleId: perleDeauDouce.id,
         couleurId: blanc.id
     });
-    const collierChaineAvecPerles2 = await CollierEtChaineAvecPerle.create({
+    const collierChaineAvecPerles2 = await ArticleAvecPerle.create({
         nbPerles: "1",
-        collierEtChaineId: CollierEtChaine5.id,
+        articleId: CollierEtChaine5.articleId,
         typeDePerleId: perleDeTahiti.id,
         couleurId: gris.id
     });
-    const bouclesDoreillesAvecPerles1 = await BouclesDoreillesAvecPerle.create({
+    const bouclesDoreillesAvecPerles1 = await ArticleAvecPerle.create({
         nbPerles: "2",
-        bouclesDoreilleId: bouclesDoreillesFemme2.id,
+        articleId: bouclesDoreillesFemme2.articleId,
         typeDePerleId: perleDeauDouce.id,
         couleurId: blanc.id
     });
-    const bouclesDoreillesAvecPerles2 = await BouclesDoreillesAvecPerle.create({
+    const bouclesDoreillesAvecPerles2 = await ArticleAvecPerle.create({
         nbPerles: "2",
-        bouclesDoreilleId: bouclesDoreillesFemme6.id,
+        articleId: bouclesDoreillesFemme6.articleId,
         typeDePerleId: perleDeauDouce.id,
         couleurId: blanc.id
     });
-    const bouclesDoreillesAvecPerles3 = await BouclesDoreillesAvecPerle.create({
+    const bouclesDoreillesAvecPerles3 = await ArticleAvecPerle.create({
         nbPerles: "2",
-        bouclesDoreilleId: bouclesDoreillesFemme7.id,
+        articleId: bouclesDoreillesFemme7.articleId,
         typeDePerleId: perleDeauDouce.id,
         couleurId: bleu.id
     });
-    const bouclesDoreillesAvecPerles4 = await BouclesDoreillesAvecPerle.create({
+    const bouclesDoreillesAvecPerles4 = await ArticleAvecPerle.create({
         nbPerles: "2",
-        bouclesDoreilleId: bouclesDoreillesFemme9.id,
+        articleId: bouclesDoreillesFemme9.articleId,
         typeDePerleId: perleDeTahiti.id,
         couleurId: gris.id
     });

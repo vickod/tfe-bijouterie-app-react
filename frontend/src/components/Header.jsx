@@ -1,17 +1,12 @@
-import {Navbar, Nav, Container} from 'react-bootstrap';
+import {Navbar, Nav, Container,DropdownButton, Dropdown, Row, Col} from 'react-bootstrap';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import brandLogo from '../assets/logos/logoBijouterie.png'
 import {LinkContainer} from 'react-router-bootstrap'
 //import { useState } from 'react';
 import '../assets/styles/header.css';
+import { Link } from "react-router-dom";
 const Header = () => {
-/*
-  const [isContainerVisible, setIsContainerVisible] = useState(false);
 
-  const showContainerSlide = () => {
-    setIsContainerVisible(!isContainerVisible);
-  };
-*/
 
   return (
     <header>
@@ -43,19 +38,20 @@ const Header = () => {
       </Navbar>
 
       {/* BOUTIQUE BUTTON */}
-     {/* 
-      <div className="button-slide">
-        <button className="boutique-button">BOUTIQUE</button>
-      </div>
-
-    {isContainerVisible && (
+     
+     {/* <div className='button-slide'>
+     <Container>
+     <Row> 
+        <Col>
+     <DropdownButton id="dropdown-basic-button" className='boutique-button' title="Boutique">
+      <Dropdown.Item href="#/action-1" className='dropdown-menu-center'>
 
       <div className="container-slide">
         <div className="woman">
           <div>
             <img
               className="image-slide"
-              src="img/pexels-pixabay-458766.jpg"
+              src="/img/pexels-pixabay-458766.jpg"
               alt="woman"
               width="300"
             />
@@ -63,7 +59,7 @@ const Header = () => {
           <div className="woman-categories">
             <h1>Femme</h1>
             <div>
-              <h3>Bagues</h3>
+            <Link to="/femme/bagues"><h3>Bagues</h3> </Link>
               <h3>Boucles d'oreilles</h3>
               <h3>Colliers et Chaines</h3>
             </div>
@@ -73,7 +69,7 @@ const Header = () => {
           <div>
             <img
               className="image-slide"
-              src="img/man.jpg"
+              src="/img/man.jpg"
               alt="man"
               width="300"
             />
@@ -87,8 +83,20 @@ const Header = () => {
           </div>
         </div>
       </div>
+      
+      </Dropdown.Item>
+      </DropdownButton>
+      </Col>
+      </ Row>
+      </Container>
+     </div> */}
+      
 
-     )}*/}
+   
+
+      
+
+
 
     </header>
   );

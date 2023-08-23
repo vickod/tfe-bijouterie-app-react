@@ -1,12 +1,11 @@
 import React from "react";
 import { Accordion, Form } from "react-bootstrap";
 
-const SelectionFilter = ({ selection, setSelectedSelection }) => {
+const SelectionFilter = ({ setValueSelectionId }) => {
   const selections = ["tous", "homme", "femme"];
 
-  const changeSelection = (event) => {
-    selection(event.target.value);
-    setSelectedSelection(selections[event.target.value])
+  const getSelectedSelection = (event) => {
+    setValueSelectionId(event.target.value);
   };
 
   return (
@@ -28,7 +27,7 @@ const SelectionFilter = ({ selection, setSelectedSelection }) => {
                     label={selection}
                     value={index}
                     defaultChecked={index === 0}
-                    onChange={changeSelection}
+                    onChange={getSelectedSelection}
                   />
                 ))}
               </div>

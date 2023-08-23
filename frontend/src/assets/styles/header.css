@@ -3,22 +3,23 @@
     width: 100%;
     display: flex;
     justify-content: center!important;
-    align-items: center;
-    margin-bottom: 20px;
+    padding-bottom: 20px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
+.boutique-button {
+    display: flex;
+    justify-content: start!important;
+}
 
-.container-slide {
+/* .container-slide {
     width: 100%;
     position: absolute;
     display: flex;
     justify-content: center;
     gap: 50px;
-    z-index: 2;
-    background-color: white;
- 
-    
-}
+    z-index: 1;
+    background-color: white; 
+} */
 .woman {
     display: flex;
     gap: 20px;

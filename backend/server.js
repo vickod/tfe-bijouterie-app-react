@@ -14,7 +14,7 @@ app.use(express.static(`${__dirname}/backend/public`))
 //routes
 app.use('/api/articles', articlesRoutes)
 
-
+app.use('/api/articles/bagues', articlesRoutes)
 
 // errorMiddleWares
 app.use(notFound);

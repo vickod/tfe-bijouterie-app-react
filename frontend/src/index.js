@@ -16,11 +16,12 @@ import Articles from './screens/Articles';
 import DetailArticle from './screens/DetailArticle';
 
 
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-        <Route index={true} path='/' element={<Articles />} />  
-        <Route path='/articles/:id' element={<DetailArticle />} />   
+        <Route index={true} path='/' element={<Articles />} /> 
+        <Route path='/articles/:id' element={<DetailArticle />} />         
     </Route>
 )
 )

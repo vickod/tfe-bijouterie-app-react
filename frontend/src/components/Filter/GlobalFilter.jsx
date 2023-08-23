@@ -1,43 +1,70 @@
 import React from 'react'
 import {Accordion} from 'react-bootstrap';
 import SelectionFilter from './SelectionFilter'
-import { useState } from 'react';
 import CategoriesFilter from './CategoriesFilter';
-import TypeDeBagueFilter from './TypeDeBagueFilter';
-
+import MatiereFilter from './MatiereFilter';
+import CaratsFilter from './CaratsFilter';
+import TypeDePierreFilter from './TypeDePierreFilter';
+import TypeDePerles from './TypeDePerles';
+import SortFilter from './SortFilter';
 
 const GlobalFilter = ({
-  selectionId, 
-  setSelectionId, 
   articles,
   categories,
-  bagues,
+  matieres,
+  typeDePierres,
+  typeDePerles,
+
+  setValueSelectionId,
+  setValueCategorie, 
+  setValueMatieres,
+  setValueCarats,
+  setValuePierres,
+  setValuePerles,
+  setValueSort
 
 }) => {
-const [selectedSelection, setSelectedSelection] = useState('tous')
+
+
 
 
   return (
     <Accordion defaultActiveKey="0" alwaysOpen>
       
       <SelectionFilter 
-      selection={setSelectionId} 
-      setSelectedSelection={setSelectedSelection}
+      setValueSelectionId={setValueSelectionId} 
       />
-
-      <CategoriesFilter 
-      articles={articles} 
-      categories={categories}
-      selectedSelection={selectedSelection}
-      />
-
-      <TypeDeBagueFilter
-      bagues={bagues}
-      articles={articles} 
-       />
-
-
       
+      <CategoriesFilter 
+      categories={categories}
+      setValueCategorie={setValueCategorie}
+      />
+
+      <MatiereFilter 
+      matieres={matieres}
+      setValueMatieres={setValueMatieres}
+      />   
+
+     
+      <CaratsFilter 
+      setValueCarats={setValueCarats}
+      />
+     
+
+      <TypeDePierreFilter 
+        typeDePierres={typeDePierres}
+        setValuePierres={setValuePierres}
+      />
+
+      <TypeDePerles 
+        typeDePerles={typeDePerles}
+        setValuePerles={setValuePerles}
+      />
+
+     <SortFilter 
+      setValueSort={setValueSort}
+     />
+
     </Accordion>
   );
 }

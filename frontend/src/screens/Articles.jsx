@@ -10,27 +10,45 @@ const Articles = () => {
   //data states
   const [articles, setArticles] = useState([]);
 
-  //filter states
-  const [selectionId, setSelectionId] = useState("0");
+  // PUSH DATA ON FILTER
   const [categories, setCategories] = useState([]);
-  const [bagues, setBagues] = useState([]);
-  
+  const [typeDePierres, setTypeDePierres] = useState([]);
+  const [typeDePerles, setTypeDePerles] = useState([]);
+  const [matieres, setMatieres] = useState([])
 
-    //---------------------------END OF STATES--------------------------------
+// GET VALUES OF SELECTED FILTER OPTIONS
+  const [valueSelectionId, setValueSelectionId] = useState("0");
+  const [valueCategorie, setValueCategorie] = useState('tous');
+  const [valueMatieres, setValueMatieres] = useState('tous');
+  const [valueCarats, setValueCarats] = useState('tous')
+  const [valuePierres, setValuePierres] = useState("0")
+  const [valuePerles, setValuePerles] = useState("0")
+  const [valueSort, setValueSort] = useState("aucun")
   
   useEffect(() => {
     const fetchArticles = async () => {
-      const {data} = await axios.get('/api/articles?selectionId=' +selectionId);
-      setArticles(data.articles); 
+      const {data} = await axios.get(
+        `/api/articles?selection=${valueSelectionId}&categorie=${valueCategorie}&matiere=${valueMatieres}&carats=${valueCarats}&pierre=${valuePierres}&perle=${valuePerles}&sort=${valueSort}`
+        );
+      
       setCategories(data.categories);
-      setBagues(data.bagues)
+      setTypeDePierres(data.typeDePierres);
+      setTypeDePerles(data.typeDePerles)
+      setMatieres(data.matieres)
+      setArticles(data.articles); 
+      
     };
     fetchArticles();
-  },[selectionId])
+  },[
+    valueSelectionId, 
+    valueCategorie, 
+    valueMatieres, 
+    valueCarats, 
+    valuePierres,
+    valuePerles, 
+    valueSort])
 
-
- 
-
+  
   return (
     <div>
       <h1>Tous les Articles</h1>
@@ -39,12 +57,21 @@ const Articles = () => {
         <Col xl={3} lg={4} md={6} sm={12}>
           
           <GlobalFilter 
-          selectionId={selectionId} 
-          setSelectionId={setSelectionId}
+          // PUSH DATA ON FILTER
           articles={articles}
           categories={categories}
-          bagues={bagues}
-          
+          matieres={matieres}
+          typeDePierres={typeDePierres}
+          typeDePerles={typeDePerles}
+
+          //GET VALUE OF SELECTED FILTER OPTIONS
+          setValueSelectionId={setValueSelectionId}
+          setValueCategorie={setValueCategorie}
+          setValueMatieres={setValueMatieres}
+          setValueCarats={setValueCarats}
+          setValuePierres={setValuePierres}
+          setValuePerles={setValuePerles}
+          setValueSort={setValueSort}
           />
 
         </Col>
