@@ -78,76 +78,8 @@ const getAllArticles = asyncHandler(async (req, res, next) => {
               ];
           }
     
-      console.log(perle)
     const allArticles = await Article.findAll(filterOptions);
-    
-    
-      
-
-
-
-    
-//     if (selectedTypeBague !== "tous") {
-//       filterOptions.include.push({
-//         model: Bague,
-//         where: { type: selectedTypeBague }
-//       });
-//     }
-    
-//     if (selectedTailleBague !== "tous") {
-//       filterOptions.include.push({
-//         model: Taille,
-//         where: { taille: selectedTailleBague }
-//       });
-//     }
-//     if (selectedMatiere !== "tous") {
-//       filterOptions.include.push({
-//         model: TypeDeMatiere,
-//         where: { matiere: selectedMatiere}
-//       });
-//     }
-//     if (selectedCt !== "tous") {
-//       filterOptions.include.push({
-//         model: NbCarat,
-//         where: { valeur: selectedCt}
-//       });
-//     }
-    
-//     if (selectedPierre !== "tous") {
-//       filterOptions.include.push({
-//           model: ArticleAvecPierre,
-//           where: { typeDePierreId: getPierre.id },   
-//       });
-//   }
-  
-//   if (selectedSort === "croissant") {
-//       filterOptions.order = [
-//           ['prix', 'ASC'] // Tri croissant sur le prix
-//       ];
-//   } else if (selectedSort === "decroissant") {
-//       filterOptions.order = [
-//           ['prix', 'DESC'] // Tri décroissant sur le prix
-//       ];
-//   }
-  
-
-    // Calcul de la pagination
-    //const itemsPerPage = 2;
-    //const offset = (page - 1) * itemsPerPage;
-
-    // Appliquer les options de filtre et de pagination à la requête
-    //filterOptions.offset = offset;
-    //filterOptions.limit = itemsPerPage;
-
-   
-     
-   // Récupérer le nombre total d'articles non paginés
-   //const totalArticles = await Article.count(filterOptions);
-
-   // Calculer le nombre total de pages
-   //const totalPages = Math.ceil(totalArticles / itemsPerPage);
-
-        
+       
     if(allArticles){
         res.json({
             articles:allArticles, 
@@ -172,23 +104,16 @@ const getAllArticles = asyncHandler(async (req, res, next) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
 //@desc Fetch one article
 //@route GET /api/articles/:id
 //@access Public
 const getOneArticle = asyncHandler(async (req, res, next) => {
     
     const article =  await Article.findByPk(req.params.id)
+
+    const taille = await Article.findAll
     
+
     if(article){
         res.json(article)
     }

@@ -19,9 +19,6 @@ const DetailArticle = () => {
   },);
 
 
-
-
- 
   
   return (
     <>
@@ -56,6 +53,7 @@ const DetailArticle = () => {
                                 </Col>
                             </Row>
                         </ListGroup.Item>
+                        
                         <ListGroup.Item>
                             <Row>
                                 <Col>
