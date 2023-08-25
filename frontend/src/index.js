@@ -14,6 +14,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Articles from './screens/Articles';
 import DetailArticle from './screens/DetailArticle';
+import Panier from './screens/Panier';
 
 
 
@@ -21,7 +22,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
         <Route index={true} path='/' element={<Articles />} /> 
-        <Route path='/articles/:id' element={<DetailArticle />} />         
+        <Route path='/articles/:id' element={<DetailArticle />} /> 
+        <Route path='/panier/' element={<Panier />} />        
     </Route>
 )
 )

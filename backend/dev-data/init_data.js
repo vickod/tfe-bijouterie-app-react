@@ -1268,7 +1268,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
 
     // Article - Taille pour bague femme 
     const articleTaille1 = await ArticleTaille.create({
-        stock: "20",
+        stock: "0",
         articleId: articleFemmeBague1.id,
         tailleId: tailleBague48.id
     })

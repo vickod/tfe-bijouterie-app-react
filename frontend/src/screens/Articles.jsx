@@ -16,9 +16,6 @@ const Articles = () => {
   const [typeDePerles, setTypeDePerles] = useState([]);
   const [matieres, setMatieres] = useState([])
 
-  //PUSH DATA ON DETAIL article page
-  //const [taille, setTaille] = useState([])
-
 // GET VALUES OF SELECTED FILTER OPTIONS
   const [valueSelectionId, setValueSelectionId] = useState("0");
   const [valueCategorie, setValueCategorie] = useState('tous');
@@ -44,15 +41,13 @@ const Articles = () => {
     const fetchArticles = async () => {
       const {data} = await axios.get(
         `/api/articles?selection=${valueSelectionId}&categorie=${valueCategorie}&matiere=${valueMatieres}&carats=${valueCarats}&pierre=${valuePierres}&perle=${valuePerles}&sort=${valueSort}`
-        );
-      
+        );  
       setCategories(data.categories);
       setTypeDePierres(data.typeDePierres);
       setTypeDePerles(data.typeDePerles)
       setMatieres(data.matieres)
       setArticles(data.articles);
-      setLoading(false) 
-      
+      setLoading(false)   
     };
     fetchArticles();
   },[

@@ -1,6 +1,6 @@
 const asyncHandler = require('../middleware/asyncHandler');
-const {Article, Selection, Categorie, Bague, Taille, GuideDeTailleArticle, TypeDePierre, TypeDeMatiere, Couleur, NbCarat, ArticleAvecPierre, BouclesDoreilles, BouclesDoreillesAvecPerle, CollierEtChaineAvecPerle ,CollierEtChaine, TypeDePerle, ArticleAvecPerle} = require('../dev-data/schema');
-
+const {Article, Selection, Categorie, Bague, Taille, GuideDeTailleArticle, TypeDePierre, TypeDeMatiere, Couleur, NbCarat, ArticleAvecPierre, BouclesDoreilles, BouclesDoreillesAvecPerle, CollierEtChaineAvecPerle ,CollierEtChaine, TypeDePerle, ArticleAvecPerle, ArticleTaille} = require('../dev-data/schema');
+const { Op } = require('sequelize');
 
 //@desc Fetch all articles
 //@route GET /api/articles
@@ -108,14 +108,31 @@ const getAllArticles = asyncHandler(async (req, res, next) => {
 //@route GET /api/articles/:id
 //@access Public
 const getOneArticle = asyncHandler(async (req, res, next) => {
-    
-    const article =  await Article.findByPk(req.params.id)
+    const articleId = req.params.id;
+    const article =  await Article.findByPk(articleId)
 
-    const taille = await Article.findAll
+    const articlesTailles = await Article.findByPk(articleId, {
+        include: Taille,
+      });
+
+    const articleStock = await ArticleTaille.findAll({
+        where: {articleId: articleId},
+    })
+    console.log(articleStock)
     
+    
+      // Accédez aux données de l'article et des tailles associées
+      //console.log('Article:', tailles.toJSON());
+    const tailles = articlesTailles.tailles.map((taille) => taille.toJSON());
+      
 
     if(article){
-        res.json(article)
+        res.json({
+            article,
+            tailles,
+            articlesTailles,
+            articleStock
+        })
     }
     else {
         res.status(404);
