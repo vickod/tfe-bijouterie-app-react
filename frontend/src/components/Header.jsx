@@ -5,8 +5,11 @@ import {LinkContainer} from 'react-router-bootstrap'
 //import { useState } from 'react';
 import '../assets/styles/header.css';
 import { Link } from "react-router-dom";
+//import {useSelector} from 'react-redux';
+
 const Header = () => {
 
+  
 
   return (
     <header>

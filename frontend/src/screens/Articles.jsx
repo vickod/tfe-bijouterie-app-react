@@ -5,6 +5,7 @@ import axios from 'axios'
 import GlobalFilter from '../components/Filter/GlobalFilter';
 import Pagination from '../components/PaginationItems';
 
+
 const Articles = () => {
   //---------------------------STATES--------------------------------
   //data states
@@ -67,10 +68,10 @@ const Articles = () => {
   //change Page
   const paginate = pageNumber => setCurrentPage(pageNumber)
 
-  if(loading){
-    return <h2>Chargement...</h2>
-  }
-
+  // if(loading){
+  //   return <h2>Chargement...</h2>
+  // }
+ 
   
   return (
     <div>
@@ -80,7 +81,7 @@ const Articles = () => {
         <Col xl={3} lg={4} md={6} sm={12}>
           
           <GlobalFilter 
-          // PUSH DATA ON FILTER
+          PUSH DATA ON FILTER
           articles={articles}
           categories={categories}
           matieres={matieres}

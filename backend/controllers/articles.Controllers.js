@@ -1,6 +1,6 @@
 const asyncHandler = require('../middleware/asyncHandler');
 const {Article, Selection, Categorie, Bague, Taille, GuideDeTailleArticle, TypeDePierre, TypeDeMatiere, Couleur, NbCarat, ArticleAvecPierre, BouclesDoreilles, BouclesDoreillesAvecPerle, CollierEtChaineAvecPerle ,CollierEtChaine, TypeDePerle, ArticleAvecPerle, ArticleTaille} = require('../dev-data/schema');
-const { Op } = require('sequelize');
+
 
 //@desc Fetch all articles
 //@route GET /api/articles
@@ -102,8 +102,6 @@ const getAllArticles = asyncHandler(async (req, res, next) => {
 })
 
 
-
-
 //@desc Fetch one article
 //@route GET /api/articles/:id
 //@access Public
@@ -118,11 +116,7 @@ const getOneArticle = asyncHandler(async (req, res, next) => {
     const articleStock = await ArticleTaille.findAll({
         where: {articleId: articleId},
     })
-    console.log(articleStock)
-    
-    
-      // Accédez aux données de l'article et des tailles associées
-      //console.log('Article:', tailles.toJSON());
+
     const tailles = articlesTailles.tailles.map((taille) => taille.toJSON());
       
 
@@ -139,6 +133,8 @@ const getOneArticle = asyncHandler(async (req, res, next) => {
         throw new Error("erreur au niveau de la route article/:id")
     }
 })
+
+
 
 
 

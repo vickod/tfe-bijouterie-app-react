@@ -1,19 +1,24 @@
-import {useParams } from "react-router-dom";
+import {Link, useParams, useNavigate } from "react-router-dom";
 import {useState, useEffect} from "react"
-import { Link } from "react-router-dom";
 import {Row, Col, Image, ListGroup, Card, Button, Form} from 'react-bootstrap';
 import axios from "axios";
 
-const DetailArticle = () => {
 
+const DetailArticle = () => {
+//states
   const [article, setArticles] = useState({});
   const [tailles, setTailles] = useState([])
   const [articleStock, setArticleStock] = useState([])
-
   const [valueTaille, setValueTaille] = useState(0);
-  
+  const [qty, setQty] = useState(1); //nb articles panier
+  const [gravures, setGravures] = useState([]); //pour stocker les gravures
+  const [tailleSelected, setTailleSelected] = useState(0);
+  //const [inputStates, setInputStates] = useState(Array(qty).fill(false)); // État local pour activer ou désactiver chaque champ de gravure
+// modules
   const {id} = useParams();
+  const navigate = useNavigate();
 
+//get db data (axios)
   useEffect( ()=>{
     const fetchArticles  = async ()=> {
         const {data} = await axios.get(`/api/articles/${id}`);
@@ -21,11 +26,11 @@ const DetailArticle = () => {
         setTailles(data.tailles)
         setArticleStock(data.articleStock)
     }
-
     fetchArticles()
   },[id, valueTaille]);
   
-  
+//functions
+  //select taille
 
   const selectedTaille = (event) => {
     const selectedValue = parseInt(event.target.value);
@@ -33,14 +38,113 @@ const DetailArticle = () => {
     if (selectedValue === 0) {
         setValueTaille(0);
       }
-    
+    else {
+        const taille = tailles.find((t) => t.id === selectedValue);
+        setTailleSelected(taille); 
+      } 
   }
 
-  const stockDispo = articleStock.filter((e )=> e.tailleId === parseInt(valueTaille))
+  //select quantité
+  const selectedQty = (e)=> {
+    setQty(Number(e.target.value))
+}
+ // Fonction de mise à jour des gravures
+ const getInputGravure = (index, value) => {
+    const updatedGravures = [...gravures];
+    updatedGravures[index] = value;
+    //const a = updatedGravures.filter((gravure) => gravure !== null && gravure !== "");
+    setGravures(updatedGravures);  
+
+  };
+
+
+// TRAITEMENT
+  //stock disponnible de l'article 
+  const stockDispo = articleStock.filter((e )=> 
+  e.tailleId === parseInt(valueTaille))
   .map((e) => e.stock);
+  //push gravure Component to jsx
+  const nbGravures = [];
+  for (let i = 0; i < qty; i++) {
+    nbGravures.push(
+      <ListGroup.Item key={`${article.id}-${i}`}>
+        <Row>
+          <Col>Gravure: {i+1}</Col>
+          <Col>
+            <Form.Control
+              size="sm"
+              type="text"
+              placeholder="message"
+              maxLength={10}
+              onChange={(e) => getInputGravure(i, e.target.value.trim())}
+            />
+          </Col>
+        </Row>
+      </ListGroup.Item>
+    );
+  }
+
+
+
+  
 
   
   
+  
+  
+
+//LOCAL STORAGE  
+  const ajouteAuPanier = () => {
+    const montantTotal = article.prix * qty;
+    //const taille = tailles.findIndex(valueTaille)
+    //const gravuresFiltrees = gravures.filter((gravure) => gravure !== null && gravure !== "");
+    const articleToAdd = {
+      id: article.id,
+      nom: article.nom,
+      image: article.image,
+      prix: article.prix,
+      stock: stockDispo[0],
+      selection: article.selectionId,
+      categorie: article.categorieId,
+      gravure: gravures,
+      //nbGravure:
+      tailleId: valueTaille,
+      taille: tailleSelected,
+      qty: qty,
+      montantTotal,
+      redFlag: false,
+    };
+
+    // on recupere le panier dans le storage s'il existe
+    let panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+    // on verifie si l'article est deja dans le panier
+    const articleExistant = panier.find(
+      (item) => item.id === article.id && item.tailleId === valueTaille
+    );
+
+    if (articleExistant) {
+      articleExistant.qty += qty;
+      articleExistant.montantTotal += montantTotal;
+      
+      if(articleExistant.qty > articleExistant.stock){
+        articleExistant.qty = articleExistant.stock
+        articleExistant.redFlag = true
+        alert(`vous avez atteint le nombre maximum disponible pour cet article.`);
+      }
+      if (gravures && articleExistant.gravure.length < articleExistant.stock && articleExistant.qty < articleExistant.stock) { 
+        articleExistant.gravure = [...articleExistant.gravure, ...gravures]; 
+    }
+      
+    } else {
+      panier.push(articleToAdd);
+    }
+    //save updated panier dans le local storage
+    localStorage.setItem("panier", JSON.stringify(panier));
+    navigate("/panier");
+  };
+  
+
   
   
   return (
@@ -118,8 +222,45 @@ const DetailArticle = () => {
                             </Row>
                         </ListGroup.Item>
 
+                         {stockDispo[0] > 0 && (
+                            <>
+                            <ListGroup.Item >
+                                    <Row>
+                                        <Col>Quantité:</Col>
+                                        <Col>
+                                            <Form.Control
+                                            as='select'
+                                            value = {qty}
+                                            onChange={selectedQty}
+                                            >
+                                            {[...Array(stockDispo[0]).keys()]
+                                            .map((x) => (
+                                                <option key={x + 1} value={x+1}>
+                                                    {x+1}
+                                                </option>
+                                            ))}
+                                            </Form.Control>
+                                        </Col>
+                                    </Row>
+                            </ListGroup.Item>
+
+                            
+                            
+
+                            {nbGravures}
+
+
+                           
+                            </>
+                         )}
+
+                         
+
                         <ListGroup.Item> 
-                           <Button className="btn-block" type="button" disabled={valueTaille === 0 || stockDispo[0]<=0}>
+                           <Button className="btn-block" type="button" 
+                           disabled={valueTaille === 0 || stockDispo[0]<=0}
+                           onClick={ajouteAuPanier}
+                           >
                                 Ajouter au panier
                             </Button>
                             
@@ -133,5 +274,4 @@ const DetailArticle = () => {
     </>
   )
 }
-
 export default DetailArticle
