@@ -63,7 +63,7 @@ const UtilisateursList = () => {
                 </td>
                   <td>
 
-                    <LinkContainer to={`admin/utilisateur/${utilisateur.id}/edit`}>
+                    <LinkContainer to={`/admin/utilisateurs/${utilisateur.id}/edit`}>
                       <Button variant='light' className='btn-sm'>
                         <FaEdit />
                       </Button>

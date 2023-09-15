@@ -33,6 +33,7 @@ import MesCommandes from './screens/membre/MesCommandes';
 import ArticlesList from './screens/admin/ArticlesList';
 import EditArticle from './screens/admin/EditArticle';
 import UtilisateursList from './screens/admin/UtilisateursList';
+import EditUtilisateur from './screens/admin/EditUtilisateur';
 
 
 const router = createBrowserRouter(
@@ -60,6 +61,7 @@ const router = createBrowserRouter(
           <Route path='/admin/articles_list' element={<ArticlesList />} />
           <Route path='/admin/articles/:id/edit' element={<EditArticle />} />
           <Route path='/admin/utilisateurs_list' element={<UtilisateursList />} />
+          <Route path='/admin/utilisateurs/:id/edit' element={<EditUtilisateur />} />
         </Route>
         {/* <Route path='/test' element={<HomeTest />} /> */}
     </Route>

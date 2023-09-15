@@ -185,17 +185,25 @@ const getUserById = asyncHandler(async(req,res) =>{
 // @access Private/Admin
 const updateUser = asyncHandler(async(req,res) =>{
     const utilisateur = await Utilisateur.findByPk(req.params.id);
-
+    console.log("blablablablabla: voici l'admin"+ req.body.role)
+    let role;
+    // if(req.body.role){
+    //     role = 2;
+    // }else {
+    //     role = 1;
+    // }
     if(utilisateur) {
+       
         const updatedUtilisateur = await Utilisateur.update(
-            {where: {id: req.params.id}},
             {
             nom: req.body.nom || utilisateur.nom,
             prenom: req.body.prenom || utilisateur.prenom,
             email: req.body.email || utilisateur.email,
             telephone: req.body.telephone || utilisateur.telephone,
             adresse: req.body.adresse || utilisateur.adresse,
-            }
+            //roleId: role || utilisateur.role,
+            }, 
+            {where: {id: req.params.id}}
         )
         res.status(200).json({
            id: updatedUtilisateur.id,
@@ -204,7 +212,7 @@ const updateUser = asyncHandler(async(req,res) =>{
            email: updatedUtilisateur.email,
            telephone: updatedUtilisateur.telephone,
            adresse: updatedUtilisateur.adresse,
-           roleId: updatedUtilisateur.roleId,
+           //roleId: updatedUtilisateur.roleId,
         })
     }
     else {
