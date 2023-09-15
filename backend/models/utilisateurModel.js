@@ -24,7 +24,7 @@ const Utilisateur = sequelize.define('utilisateur',{
     },
     telephone: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
         isNumeric: true
     },
     adresse: {

@@ -4,13 +4,9 @@ const {
     Article, 
     Utilisateur, 
     Role, 
-    Facture, 
     Commande, 
     LigneDeCommande, 
     Taille,
-    CollierEtChaine,
-    Bague,
-    BouclesDoreilles,
     ArticleTaille,
     Couleur,
     TypeDePierre,
@@ -20,8 +16,7 @@ const {
     TypeDePerle,
     Mesure,
     GuideDeTailleArticle,
-    BouclesDoreillesAvecPerle,
-    CollierEtChaineAvecPerle,
+    Gravure,
     ArticleAvecPerle
 } = require('./schema')
 const sequelize = require('../config/db_connection')
@@ -48,21 +43,17 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
     const categorieCollier = await Categorie.create({
         nom: "Colliers et chaines",
     });
-    /*
-    const categorieAlliances = await Categorie.create({
-        nom: "Alliances",
-    });
-    */
+   
     //Selection - categorie
     await hommes.addCategorie(categorieBagues)
     await hommes.addCategorie(categorieCollier)
-    //await hommes.addCategorie(categorieAlliances)
-    //await hommes.addCategorie(categorieEtuis)
+    await hommes.addCategorie(categorieBouclesDoreilles)
+  
+
     await femmes.addCategorie(categorieBagues)
     await femmes.addCategorie(categorieBouclesDoreilles)
     await femmes.addCategorie(categorieCollier)
-    //await femmes.addCategorie(categorieAlliances)
-    //await femmes.addCategorie(categorieEtuis)
+ 
 
     //Creations des roles
     const client = await Role.create({
@@ -72,15 +63,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         role: "manager",
     });
     //Creation des Utilisateurs
-    const victor = await Utilisateur.create({
-        nom: "victor",
-        prenom: "od",
-        email:"victor@mail.com",
-        telephone: "0483245599",
-        adresse: "avenue de l'elite 33",
-        password: await hashPassword("password"),
-        roleId: manager.id
-    });
+    
     const pierre = await Utilisateur.create({
         nom: "moro",
         prenom: "pierre",
@@ -89,6 +72,15 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         adresse: "chaussée de wavre 40",
         password: await hashPassword("password"),
         roleId: client.id
+    });
+    const victor = await Utilisateur.create({
+        nom: "Tor",
+        prenom: "Vick",
+        email:"victor@mail.com",
+        telephone: "0483245599",
+        adresse: "avenue de l'elite 33",
+        password: await hashPassword("password"),
+        roleId: manager.id
     });
     const alice = await Utilisateur.create({
         nom: "arilo",
@@ -218,12 +210,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         valeur: "Diamant/0.08 ct ",
     });
 
-    //Creations de Type de matiere 
-    /*
-     const or = await TypeDeMatiere.create({
-        matiere: "or"
-    });
-    */
+   
     const argent = await TypeDeMatiere.create({
         matiere: "argent "
     });
@@ -241,12 +228,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
     });
     
 
-    //Type de matiere - Nb carat
-    /*
-    await or.addNbCarat(or14)
-    await or.addNbCarat(or18)
-    await or.addNbCarat(or9)
-    */
+    
     await orRouge.addNbCarat(or9)
     await orRouge.addNbCarat(or14)
     await orRouge.addNbCarat(or18)
@@ -260,14 +242,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
     await orBlanc.addNbCarat(or14)
     await orBlanc.addNbCarat(or18)
     await argent.addNbCarat(arg)
-    /*
-    //Type de matiere - Couleur
-    await or.addCouleur(jaune)
-    await or.addCouleur(rose)
-    await or.addCouleur(blanc)
-    await or.addCouleur(rouge)
-    await argent.addCouleur(couleurArgent)
-    */
+   
 
      //Creations de Type de perle 
      const perleDeauDouce = await TypeDePerle.create({
@@ -748,55 +723,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         typeDeMatiereId: orBlanc.id,
         nbCaratId: or18.id
     });
-    /*
-    //Creations des articles etuis pour femme
-    const articleEtuisFemme1 = await Article.create({
-        nom: "Écrin pour bague",
-        prix: 5.00,
-        message:"",
-        image: "https://www.rhomberg.be/fr/detail/ecrin-pour-bijoux-569405.html",
-        categorieId: categorieEtuis.id,
-        //typeDeMatiereId: argent.id,
-        //nbCaratId: arg.id
-    });
-    const articleEtuisFemme2 = await Article.create({
-        nom: "Écrin pour bijoux",
-        prix: 39.00,
-        message:"",
-        image: "https://www.rhomberg.be/fr/detail/ecrin-pour-bijoux-509787.html?cat=15217",
-        categorieId: categorieEtuis.id,
-        //typeDeMatiereId: argent.id,
-        //nbCaratId: arg.id
-    });
-    const articleEtuisFemme3 = await Article.create({
-        nom: "Ecrin à bijoux",
-        prix: 29.00,
-        message:"",
-        image: "https://www.rhomberg.be/fr/detail/ecrin-a-bijoux-590488.html?cat=15217",
-        categorieId: categorieEtuis.id,
-        //typeDeMatiereId: argent.id,
-        //nbCaratId: arg.id
-    });
-    //Creations des articles etuis pour femme
-    const articleEtuisHomme1 = await Article.create({
-        nom: "Écrin pour bague",
-        prix: 49.00,
-        message:"",
-        image: "https://www.rhomberg.be/fr/detail/ecrin-pour-bague-557442.html?cat=15217",
-        categorieId: categorieEtuis.id,
-        //typeDeMatiereId: argent.id,
-        //nbCaratId: arg.id
-    });
-    const articleEtuisHomme2 = await Article.create({
-        nom: "Ecrin à bijoux",
-        prix: 100.00,
-        message:"",
-        image: "https://www.rhomberg.be/fr/detail/ecrin-a-bijoux-582672.html?cat=15217",
-        categorieId: categorieEtuis.id,
-        //typeDeMatiereId: argent.id,
-        //nbCaratId: arg.id
-    });
-    */
+    
 
     // article - couleur
     articleFemmeBague1.addCouleur(silver)
@@ -842,181 +769,8 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
     articleBoucleDoreillesFemme8.addCouleur(jaune)
     articleBoucleDoreillesFemme9.addCouleur(silver)
 
-    // Creation de types de bagues
-    const baguePave = await Bague.create({
-        type: "pavé",
-        articleId: articleFemmeBague1.id
-    });
-    const bagueAnneau = await Bague.create({
-        type: "anneau",
-        articleId: articleFemmeBague2.id
-    });
-    const bagueSolitaire = await Bague.create({
-        type: "solitaire",
-        articleId: articleFemmeBague3.id
-    });
-    const bagueSolitaire2 = await Bague.create({
-        type: "solitaire",
-        articleId: articleFemmeBague4.id
-    });
-    const bagueSolitaire3 = await Bague.create({
-        type: "solitaire",
-        articleId: articleFemmeBague5.id
-    });
-    const bagueSolitaire4 = await Bague.create({
-        type: "solitaire",
-        articleId: articleFemmeBague6.id
-    });
-    const bagueA3pierres = await Bague.create({
-        type: "bagues à 3 pierres",
-        articleId: articleFemmeBague7.id
-    });
-    const bagueAnneau2 = await Bague.create({
-        type: "anneau",
-        articleId: articleFemmeBague8.id
-    });
-    const bagueA3pierres2 = await Bague.create({ // 3 pierres emeraude differentes
-        type: "bagues à 3 pierres",
-        articleId: articleFemmeBague9.id
-    });
-    const bagueAnneau3 = await Bague.create({ 
-        type: "anneau",
-        articleId: articleFemmeBague10.id
-    });
-    const bagueAnneau4 = await Bague.create({ 
-        type: "anneau",
-        articleId: articleHommeBague1.id
-    });
-    const bagueChevaliere = await Bague.create({ 
-        type: "chevaliere",
-        articleId: articleHommeBague2.id
-    });
-    const bagueAnneau5 = await Bague.create({ 
-        type: "anneau",
-        articleId: articleHommeBague3.id
-    });
-    const bagueChevaliere2 = await Bague.create({ 
-        type: "chevaliere",
-        articleId: articleHommeBague4.id
-    });
-    const bagueAlliance = await Bague.create({ 
-        type: "alliance",
-        articleId: articleFemmeAlliance1.id
-    });
-    const bagueAlliance2 = await Bague.create({ 
-        type: "alliance",
-        articleId: articleFemmeAlliance2.id
-    });
-    const bagueAlliance3 = await Bague.create({ 
-        type: "alliance",
-        articleId: articleFemmeAlliance3.id
-    });
-    const bagueAlliance4 = await Bague.create({ 
-        type: "alliance",
-        articleId: articleFemmeAlliance4.id
-    });
-    const bagueAlliance5 = await Bague.create({ 
-        type: "alliance",
-        articleId: articleFemmeAlliance5.id
-    });
-    const bagueAlliance6 = await Bague.create({ 
-        type: "alliance",
-        articleId: articleHommeAlliance1.id
-    });
-    const bagueAlliance7 = await Bague.create({ 
-        type: "alliance",
-        articleId: articleHommeAlliance2.id
-    });
-    const bagueAlliance8 = await Bague.create({ 
-        type: "alliance",
-        articleId: articleHommeAlliance3.id
-    });
-    const bagueAlliance9 = await Bague.create({ 
-        type: "alliance",
-        articleId: articleHommeAlliance4.id
-    });
-    const bagueAlliance10 = await Bague.create({ 
-        type: "alliance",
-        articleId: articleHommeAlliance5.id
-    });
 
 
-    //Creations de types de colliers femme
-    const CollierEtChaine1 = await CollierEtChaine.create({
-        fermeture: "Mousqueton",
-        motif: "coeur",
-        articleId: articleFemmeCollier1.id
-    });
-    const CollierEtChaine2 = await CollierEtChaine.create({
-        fermeture: "Mousqueton",
-        articleId: articleFemmeCollier2.id
-    });
-    const CollierEtChaine3 = await CollierEtChaine.create({
-        fermeture: "Fermeture magnétique",
-        articleId: articleFemmeCollier3.id
-    });
-    const CollierEtChaine4 = await CollierEtChaine.create({
-        fermeture: "Anneau ressort",
-        articleId: articleFemmeCollier4.id
-    });
-    const CollierEtChaine5 = await CollierEtChaine.create({
-        fermeture: "Mousqueton",
-        articleId: articleFemmeCollier5.id
-    });
-    const CollierEtChaine6 = await CollierEtChaine.create({
-        fermeture: "Anneau ressort",
-        articleId: articleFemmeCollier6.id
-    });
-    //Creations de types de colliers homme
-    const CollierEtChaineHomme1 = await CollierEtChaine.create({
-        fermeture: "Anneau ressort",
-        articleId: articleHommeCollier1.id
-    });
-    const CollierEtChaineHomme2 = await CollierEtChaine.create({
-        fermeture: "Mousqueton",
-        articleId: articleHommeCollier2.id
-    });
-    const CollierEtChaineHomme3 = await CollierEtChaine.create({
-        fermeture: "Mousqueton",
-        articleId: articleHommeCollier3.id
-    });
-    //Creations de types de Boucles d'oreilles 
-    const bouclesDoreillesFemme1 = await BouclesDoreilles.create({
-        type:"clous d'oreilles",
-        articleId: articleBoucleDoreillesFemme1.id
-    });
-    const bouclesDoreillesFemme2 = await BouclesDoreilles.create({
-        type:"pendant d'oreilles",
-        articleId: articleBoucleDoreillesFemme2.id
-    });
-    const bouclesDoreillesFemme3 = await BouclesDoreilles.create({
-        type:"clous d'oreilles",
-        articleId: articleBoucleDoreillesFemme3.id
-    });
-    const bouclesDoreillesFemme4 = await BouclesDoreilles.create({
-        type:"clous d'oreilles", 
-        articleId: articleBoucleDoreillesFemme4.id
-    });
-    const bouclesDoreillesFemme5 = await BouclesDoreilles.create({
-        type:"Créoles",
-        articleId: articleBoucleDoreillesFemme5.id
-    });
-    const bouclesDoreillesFemme6 = await BouclesDoreilles.create({
-        type:"clous d'oreilles", 
-        articleId: articleBoucleDoreillesFemme6.id
-    });
-    const bouclesDoreillesFemme7 = await BouclesDoreilles.create({
-        type:"clous d'oreilles", 
-        articleId: articleBoucleDoreillesFemme7.id
-    });
-    const bouclesDoreillesFemme8 = await BouclesDoreilles.create({
-        type:"Créoles",
-        articleId: articleBoucleDoreillesFemme8.id
-    });
-    const bouclesDoreillesFemme9 = await BouclesDoreilles.create({
-        type:"clous d'oreilles", 
-        articleId: articleBoucleDoreillesFemme9.id
-    });
 
     //_________________________________________ARTICLES AVEC PIERRES_________________________________________
     const bagueFemmeAvecPierres = await ArticleAvecPierre.create({
@@ -1140,28 +894,28 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
     });
     const collierFemmeAvecPierres4 = await ArticleAvecPierre.create({
         nbPierres: "1",
-        articleId: CollierEtChaine6.articleId,
+        articleId: articleFemmeCollier6.id,
         typeDePierreId: rubis.id,
         couleurId: roseTransparent.id,
         //nbCaratId: diamantCt09.id
     });
     const bouclesDoreillesFemmeAvecPierres1 = await ArticleAvecPierre.create({
         nbPierres: "2",
-        articleId: bouclesDoreillesFemme1.articleId,
+        articleId: articleBoucleDoreillesFemme1.id,
         typeDePierreId: zircone.id,
         couleurId: blancTransparent.id,
         //nbCaratId: diamantCt09.id
     });
     const bouclesDoreillesFemmeAvecPierres2 = await ArticleAvecPierre.create({
         nbPierres: "18",
-        articleId: bouclesDoreillesFemme2.articleId,
+        articleId: articleBoucleDoreillesFemme2.id,
         typeDePierreId: diamant.id,
         couleurId: blancTransparent.id,
         nbCaratId: diamantCt08.id
     });
     const bouclesDoreillesFemmeAvecPierres3 = await ArticleAvecPierre.create({
         nbPierres: "2",
-        articleId: bouclesDoreillesFemme3.articleId,
+        articleId: articleBoucleDoreillesFemme3.id,
         typeDePierreId: saphir.id,
         couleurId: bleu.id,
         //nbCaratId: diamantCt08.id
@@ -1171,37 +925,37 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
     //Creations des colliers chaines avec perle femme
     const collierChaineAvecPerles1 = await ArticleAvecPerle.create({
         nbPerles: "48",
-        articleId: CollierEtChaine3.articleId,
+        articleId: articleFemmeCollier3.id,
         typeDePerleId: perleDeauDouce.id,
         couleurId: blanc.id
     });
     const collierChaineAvecPerles2 = await ArticleAvecPerle.create({
         nbPerles: "1",
-        articleId: CollierEtChaine5.articleId,
+        articleId: articleFemmeCollier5.id,
         typeDePerleId: perleDeTahiti.id,
         couleurId: gris.id
     });
     const bouclesDoreillesAvecPerles1 = await ArticleAvecPerle.create({
         nbPerles: "2",
-        articleId: bouclesDoreillesFemme2.articleId,
+        articleId: articleBoucleDoreillesFemme2.id,
         typeDePerleId: perleDeauDouce.id,
         couleurId: blanc.id
     });
     const bouclesDoreillesAvecPerles2 = await ArticleAvecPerle.create({
         nbPerles: "2",
-        articleId: bouclesDoreillesFemme6.articleId,
+        articleId: articleBoucleDoreillesFemme6.id,
         typeDePerleId: perleDeauDouce.id,
         couleurId: blanc.id
     });
     const bouclesDoreillesAvecPerles3 = await ArticleAvecPerle.create({
         nbPerles: "2",
-        articleId: bouclesDoreillesFemme7.articleId,
+        articleId: articleBoucleDoreillesFemme7.id,
         typeDePerleId: perleDeauDouce.id,
         couleurId: bleu.id
     });
     const bouclesDoreillesAvecPerles4 = await ArticleAvecPerle.create({
         nbPerles: "2",
-        articleId: bouclesDoreillesFemme9.articleId,
+        articleId: articleBoucleDoreillesFemme9.id,
         typeDePerleId: perleDeTahiti.id,
         couleurId: gris.id
     });

@@ -7,15 +7,42 @@ const Commande = sequelize.define('commande', {
         autoIncrement: true,
         type: Sequelize.INTEGER
     },
-    date:{
+    orderAt:{
         type: Sequelize.DATE,
         default: Date.now(),
         allowNull: false
     },
-    montant: {
+    total: {
         type: Sequelize.DOUBLE,
         allowNull: false
+    },
+    isPaid:{
+        type :Sequelize.BOOLEAN ,
+        allowNull:false,
+        defaultValue: false
+    },
+    paidAt: {
+        type: Sequelize.DATE,
+        allowNull: true
+    },
+    isDelivered: {
+        type:Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
+    deliveredAt: {
+        type: Sequelize.DATE,
+        allowNull: true
+    },
+    methodeDePayement: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
+    premiereCommande: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false
     }
-},{timestamps: false})
+},{timestamps: true})
 module.exports = Commande
 

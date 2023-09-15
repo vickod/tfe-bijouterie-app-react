@@ -13,7 +13,6 @@ const CaratsFilter = ({setValueCarats}) => {
 
   return (
     <>
-    
         <Accordion.Item eventKey="3">
         <Accordion.Header>Carats</Accordion.Header>
         <Accordion.Body>
@@ -42,5 +41,4 @@ const CaratsFilter = ({setValueCarats}) => {
     </>
   )
 }
-
 export default CaratsFilter

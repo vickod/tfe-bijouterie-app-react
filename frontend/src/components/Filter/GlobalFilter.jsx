@@ -29,7 +29,8 @@ const GlobalFilter = ({
 
 
   return (
-    <Accordion defaultActiveKey="0" alwaysOpen>
+    //alwaysOpen
+    <Accordion defaultActiveKey="0" >   
       
       <SelectionFilter 
       setValueSelectionId={setValueSelectionId} 

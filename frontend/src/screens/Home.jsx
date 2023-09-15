@@ -4,8 +4,6 @@ import Article from '../components/Article';
 import axios from 'axios'
 import GlobalFilter from '../components/Filter/GlobalFilter';
 import Pagination from '../components/PaginationItems';
-
-
 const Articles = () => {
   //---------------------------STATES--------------------------------
   //data states
@@ -72,16 +70,14 @@ const Articles = () => {
   //   return <h2>Chargement...</h2>
   // }
  
-  
   return (
     <div>
       <h1>Tous les Articles</h1>
       <Row>
-       
         <Col xl={3} lg={4} md={6} sm={12}>
           
           <GlobalFilter 
-          PUSH DATA ON FILTER
+          //PUSH DATA ON FILTER
           articles={articles}
           categories={categories}
           matieres={matieres}
@@ -97,23 +93,22 @@ const Articles = () => {
           setValuePerles={setValuePerles}
           setValueSort={setValueSort}
           />
-
         </Col>
-        
+     
         {currentItems.map((elem) => (
           <Col key={elem.id} sm={12} md={6} lg={4} xl={3}>
             <Article article={elem}  />
           </Col>
         ))}
       </Row>
-      <Col>
+      <div className='paginationDiv'>
         <Pagination 
         itemsPerPage={itemsPerPage} 
         totalItems={articles.length} 
         paginate={paginate}
         currentPage={currentPage}
         />
-      </Col>
+      </div>
     </div>
   );
 }

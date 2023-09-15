@@ -15,13 +15,17 @@ const Article = sequelize.define('article', {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    type: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
     prix: {
         type: Sequelize.FLOAT,
         allowNull: false
     },
     message: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     image: {
         type: Sequelize.STRING,

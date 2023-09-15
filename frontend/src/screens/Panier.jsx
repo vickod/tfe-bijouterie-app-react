@@ -1,121 +1,147 @@
-import React from 'react'
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Row, Col, ListGroup, Image, Form, Button, Card, ListGroupItem } from 'react-bootstrap'
+import { Row, Col, ListGroup, Image, Button, Card, Dropdown} from 'react-bootstrap'
 import { FaTrash } from 'react-icons/fa'
+import { useDispatch, useSelector } from 'react-redux';
+import Message from '../components/Message';
+import { supprimerDuPanier } from '../slices/panierSlice';
 
 
 const Panier = () => {
-    const navigate = useNavigate()
-
-  const [articlesPanier, setArticlesPanier] = useState([]);
-
-  useEffect(() => {
-    const panierStorage = JSON.parse(localStorage.getItem('panier')) || [];
-    setArticlesPanier(panierStorage);
-  }, []);
-
-
-  const gravuresNonNulles = articlesPanier.length > 0
-  ? articlesPanier
-      .map((article) => article.gravure)
-      .flat()
-      .filter((gravure) => gravure !== null)
-  : [];
-
-
-  const deleteArticlePanier = (id) => {
-    let panier = JSON.parse(localStorage.getItem('panier')) || [];
-
-    panier = panier.filter((article) => article.id !== id);
-
-    localStorage.setItem('panier', JSON.stringify(panier));
-    // maj de l'état local pour refléter le panier mis à jour
-    setArticlesPanier(panier);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { articlesDuPanier } = useSelector((state) => state.panier);
+  
+  const supprimerArticle = (id,taille) => {
+    dispatch(supprimerDuPanier({ id, taille}));
+    window.location.reload()
   };
 
-
-  const verifierSession = ()=>{
-    navigate(`/login?redirect=/achat`)
-  }
-
+  const verificationCommande = () => {
+    navigate("/login?redirect=/verification");
+    window.location.reload()
+  };
 
   return (
     <Row>
-        <Col md={8}>
-            <h1 style={{marginBottom:'20px'}}>Panier</h1>
-            {articlesPanier.length === 0 ? (
-                <>
-                <h2>Panier vide...</h2> <Link to="/">Revenir</Link>
-                </>
-            ): (
-                <ListGroup variant='flush'> 
-                        {articlesPanier.map((article)=>(
-                            <ListGroup.Item key={`${article.id}-${article.taille.taille}`}>
-                                <Row>
-                                    <Col md={2}>
-                                        <Image src={article.image} alt={article.nom} fluid rounded />
-                                    </Col>
-                                    <Col md={3}>
-                                        <Link to={`/articles/${article.id}`}>{article.nom}</Link>
-                                    </Col>
-                                    <Col md={2}>
-                                        {article.prix}€
-                                    </Col>
-                                    <Col md={2}>
-                                        Taille:{article.taille.taille}
-                                    </Col>
-                                    {article.redFlag === true ? (
-                                        <Col md={2} >
-                                        Quantité:<strong style={{color:"red"}}>{article.qty}</strong>
-                                        </Col>
-                                    ):
-                                    <Col md={2}>
-                                        Quantité:{article.qty}
-                                    </Col>
-                                    }
-                                    
-                                    <Col md={1}>
-                                        <Button type='button' variant='light' onClick={() => deleteArticlePanier(article.id)}>
-                                            <FaTrash />
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </ListGroup.Item>
-                        ))}
-                </ListGroup>   
-            )}  
-        </Col>
-        <Col md={4}>
-        <Card>
-            <ListGroup variant='flush'>
-                <ListGroup.Item>
-                    <h2>
-                        Total ({articlesPanier.reduce((acc, item)=> acc+item.qty, 0)}) articles
-                    </h2>
-                    <Col>
-                        + Gravures gratuites: {gravuresNonNulles.length}
-                    </Col>
-                    <Col>
-                    € {articlesPanier.reduce((acc, item)=> acc+item.qty*item.prix,0).toFixed(2)}
-                    </Col>       
-                </ListGroup.Item>
+      <Col md={9}>
+        <h1 style={{ marginBottom: "20px" }}>Panier</h1>
+        {articlesDuPanier.length === 0 ? (
+          <>
+            <Message>Le panier est vide.</Message> <Link to="/">Revenir</Link>
+          </>
+        ) : (
+          <ListGroup variant="flush">
+            {articlesDuPanier.map((article, i) => (
+              <ListGroup.Item key={`${article.id}-${article.taille}panier`}>
+                <Row>
+                  <Col md={2}>
+                    <Image
+                      src={article.image}
+                      alt={article.nom}
+                      fluid
+                      rounded
+                    />
+                  </Col>
+                  <Col md={3}>
+                    <Link to={`/articles/${article.id}`}>{article.nom}</Link>
+                  </Col>
+                  <Col md={1}>{article.prix}€</Col>
+                  <Col md={2}>Taille:{article.taille}</Col>
 
-                <ListGroup.Item>
-                    <Button type='button' className='btn-block' 
-                    disabled={articlesPanier.length === 0}
-                    onClick={verifierSession}
+                  <Col md={2}>
+                    <Dropdown>
+                      <style>
+                        {`
+                        .dropdown-toggle::after {
+                            display: none;
+                        }
+                        `}
+                      </style>
+                      <Dropdown.Toggle
+                        as="a"
+                        variant="link"
+                        id="dropdown-basic"
+                        style={{
+                          textDecoration: "none",
+                          color: "inherit",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Gravures: {article.gravures.filter((gravure) => gravure !== null && gravure !== "").length}
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                      {article.gravures
+    .filter((gravure) => gravure !== null && gravure !== "") // Exclure les chaînes vides et les valeurs null
+    .map((gravure, index) => (
+      <Dropdown.Item key={index}>{gravure}</Dropdown.Item>
+    ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+
+                  <Col md={1}>Qté:{article.qty}</Col>
+
+                  <Col md={1}>
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={(id, taille) => supprimerArticle(article.id, article.taille)}
                     >
-                        Proceder au payement
+                      <FaTrash />
                     </Button>
-                </ListGroup.Item>
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+        )}
+      </Col>
+      <Col md={3}>
+        <Card>
+          <ListGroup variant="flush">
+            <ListGroup.Item>
+              <h2>
+                Total (
+                {articlesDuPanier.reduce((acc, item) => acc + item.qty, 0)})
+                articles
+              </h2>
+              <Col>
+               Prix HTVA: €{" "}
+              {articlesDuPanier
+                  .reduce((acc, item) => (acc + item.qty * item.prix)/1.21, 0)
+                  .toFixed(2)}
+              </Col>
+              <Col>
+               + TVA 21%: €{" "}
+              {articlesDuPanier
+                  .reduce((acc, item) => (acc + item.qty * item.prix)-(acc + item.qty * item.prix)/1.21, 0)
+                  .toFixed(2)}
+              </Col>
+              
+              <Col>
+                <strong>Total: €{" "}
+                {articlesDuPanier
+                  .reduce((acc, item) => acc + item.qty * item.prix, 0)
+                  .toFixed(2)}</strong>
+              </Col>
+            </ListGroup.Item>
 
-            </ListGroup>
+            <ListGroup.Item>
+              <Button
+                type="button"
+                className="btn-block"
+                disabled={articlesDuPanier.length === 0}
+                onClick={verificationCommande}
+              >
+                Proceder au payement
+              </Button>
+            </ListGroup.Item>
+          </ListGroup>
         </Card>
-    </Col>
+      </Col>
     </Row>
-   
-  )
+  );
 }
 
 export default Panier

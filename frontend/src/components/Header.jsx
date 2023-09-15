@@ -1,19 +1,37 @@
-import {Navbar, Nav, Container,DropdownButton, Dropdown, Row, Col} from 'react-bootstrap';
+import {Badge, Navbar, Nav, Container, NavDropdown} from 'react-bootstrap';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import brandLogo from '../assets/logos/logoBijouterie.png'
 import {LinkContainer} from 'react-router-bootstrap'
-//import { useState } from 'react';
 import '../assets/styles/header.css';
-import { Link } from "react-router-dom";
-//import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import {useLogoutMutation} from '../slices/utilisateursSlice';
+import {logout} from '../slices/authSlice';
+import { effacerPanier } from "../slices/panierSlice";
 
 const Header = () => {
+  const {articlesDuPanier} = useSelector((state) => state.panier)
 
+  const {userInfo} = useSelector((state) => state.auth)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [logoutApiCall] = useLogoutMutation();
   
+  const logoutHandler = async () => {
+      try {
+        await logoutApiCall().unwrap()
+        dispatch(logout());
+        dispatch(effacerPanier())
+        navigate('/login');
+        window.location.reload()
+      }catch(err) {
+
+      }
+  };
 
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect >
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand>
@@ -27,80 +45,55 @@ const Header = () => {
               <LinkContainer to="/panier">
                 <Nav.Link>
                   <FaShoppingCart /> Panier
+                  {
+                    articlesDuPanier.length > 0 && (
+                      <Badge pill bg='danger' style={{marginLeft: '5px'}}>
+                        {articlesDuPanier.reduce((accumulation, article) => 
+                        accumulation+ article.qty, 0)}
+                      </Badge>
+                    )
+                  }
                 </Nav.Link>
               </LinkContainer>
-              <LinkContainer to="/login">
-                <Nav.Link>
+              {userInfo ? (
+                <NavDropdown title={userInfo.prenom} id='username'>
+                <LinkContainer to="/profile">
+                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to="/mes_commandes">
+                    <NavDropdown.Item>Mes commandes</NavDropdown.Item>
+                </LinkContainer>
+                    <NavDropdown.Item onClick={logoutHandler}>Se deconnecter</NavDropdown.Item>
+                </NavDropdown> 
+              ) : (
+                <LinkContainer to="/login">
+                <Nav.Link href='/login'>
                   <FaUser />
-                  Sign in
+                  Se connecter
                 </Nav.Link>
               </LinkContainer>
+              )}
+
+
+              {userInfo && userInfo.role === 2 && (
+                <NavDropdown title='Admin' id='adminName'>
+                <LinkContainer to="/admin/articles_list">
+                    <NavDropdown.Item>Articles</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to="/admin/utilisateurs_list">
+                    <NavDropdown.Item>Utilisateurs</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to="/admin/commandes_list">
+                    <NavDropdown.Item>Commandes</NavDropdown.Item>
+                </LinkContainer>
+                </NavDropdown>
+              )}
+              
+              
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
-      {/* BOUTIQUE BUTTON */}
-     
-     {/* <div className='button-slide'>
-     <Container>
-     <Row> 
-        <Col>
-     <DropdownButton id="dropdown-basic-button" className='boutique-button' title="Boutique">
-      <Dropdown.Item href="#/action-1" className='dropdown-menu-center'>
-
-      <div className="container-slide">
-        <div className="woman">
-          <div>
-            <img
-              className="image-slide"
-              src="/img/pexels-pixabay-458766.jpg"
-              alt="woman"
-              width="300"
-            />
-          </div>
-          <div className="woman-categories">
-            <h1>Femme</h1>
-            <div>
-            <Link to="/femme/bagues"><h3>Bagues</h3> </Link>
-              <h3>Boucles d'oreilles</h3>
-              <h3>Colliers et Chaines</h3>
-            </div>
-          </div>
-        </div>
-        <div className="man">
-          <div>
-            <img
-              className="image-slide"
-              src="/img/man.jpg"
-              alt="man"
-              width="300"
-            />
-          </div>
-          <div className="man-categories">
-            <h1>Homme</h1>
-            <div>
-              <h3>Bagues</h3>
-              <h3>Chaines</h3>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      </Dropdown.Item>
-      </DropdownButton>
-      </Col>
-      </ Row>
-      </Container>
-     </div> */}
-      
-
-   
-
-      
-
-
-
     </header>
   );
 }

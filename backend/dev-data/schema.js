@@ -3,14 +3,10 @@ const Categorie = require('../models/categorieModel')
 const Article = require('../models/articleModel')
 const Utilisateur = require('../models/utilisateurModel')
 const Role = require('../models/roleModel')
-const Facture = require('../models/factureModel')
 const Commande = require('../models/commandeModel')
 const LigneDeCommande = require('../models/ligneDeCommadeModel')
 const Gravure = require('../models/gravureModel')
 const Taille = require('../models/tailleModel')
-const CollierEtChaine = require('../models/collierEtChaineModel')
-const Bague = require('../models/bagueModel')
-const BouclesDoreilles = require('../models/bouclesDoreillesModel')
 const ArticleTaille = require('../models/articleTailleModel')
 const Couleur = require('../models/couleurModel')
 const NbCarat = require('../models/nbCaratModel')
@@ -20,8 +16,6 @@ const TypeDeMatiere = require('../models/typeDeMatiereModel')
 const TypeDePerle = require('../models/typeDePerleModel')
 const Mesure = require('../models/mesureModel')
 const GuideDeTailleArticle = require('../models/guideDeTailleArticleModel')
-const BouclesDoreillesAvecPerle = require('../models/bouclesDoreillesAvecPerleModel')
-const CollierEtChaineAvecPerle = require('../models/collierEtChaineAvecPerleModel')
 const ArticleAvecPerle = require('../models/articleAvecPerleModel')
 
 // selection - categorie
@@ -40,25 +34,16 @@ Article.belongsTo(Selection)
 Role.hasMany(Utilisateur) 
 Utilisateur.belongsTo(Role)
 
-//utilisateur - facture
-Utilisateur.hasMany(Facture) 
-Facture.belongsTo(Utilisateur) 
-
 //utilisateur - commande
 Utilisateur.hasMany(Commande)
 Commande.belongsTo(Utilisateur)
-
-//commande - facture
-Commande.hasOne(Facture);
-Facture.belongsTo(Commande);
 
 //commande - ligne de commande
 Commande.hasMany(LigneDeCommande)
 LigneDeCommande.belongsTo(Commande)
 
-//ligne de commande - gravure
-Gravure.hasMany(LigneDeCommande)
-LigneDeCommande.belongsTo(Gravure)
+LigneDeCommande.hasOne(Gravure)
+Gravure.belongsTo(LigneDeCommande)
 
 //gravure - utilisateur
 Utilisateur.hasMany(Gravure)
@@ -76,13 +61,6 @@ LigneDeCommande.belongsTo(Article)
 Taille.hasMany(LigneDeCommande)
 LigneDeCommande.belongsTo(Taille)
 
-// HERITAGE ARTICLE
-Article.hasOne(CollierEtChaine)
-CollierEtChaine.belongsTo(Article)
-Article.hasOne(Bague);
-Bague.belongsTo(Article);
-Article.hasOne(BouclesDoreilles)
-BouclesDoreilles.belongsTo(Article)
 
 // article - taille (model: articleTaille comprend le stock)
 Article.belongsToMany(Taille, { through: 'articleTaille' ,timestamps: false })
@@ -135,16 +113,10 @@ Article.hasMany(GuideDeTailleArticle);
 Mesure.hasMany(GuideDeTailleArticle);
 Taille.hasMany(GuideDeTailleArticle);
 GuideDeTailleArticle.belongsTo(Article);
-GuideDeTailleArticle.belongsTo(Couleur);
-GuideDeTailleArticle.belongsTo(NbCarat);
+GuideDeTailleArticle.belongsTo(Mesure);
+GuideDeTailleArticle.belongsTo(Taille);
 
-//N-AIR: BouclesDoreillesAvecPerle: boucles d'oreilles - type de perle - couleur - nb perles  
-// BouclesDoreilles.hasMany(BouclesDoreillesAvecPerle);
-// TypeDePerle.hasMany(BouclesDoreillesAvecPerle);
-// Couleur.hasMany(BouclesDoreillesAvecPerle);
-// BouclesDoreillesAvecPerle.belongsTo(BouclesDoreilles);
-// BouclesDoreillesAvecPerle.belongsTo(TypeDePerle);
-// BouclesDoreillesAvecPerle.belongsTo(Couleur);
+
 
 Article.hasMany(ArticleAvecPerle);
 TypeDePerle.hasMany(ArticleAvecPerle);
@@ -153,20 +125,6 @@ ArticleAvecPerle.belongsTo(Article);
 ArticleAvecPerle.belongsTo(TypeDePerle);
 ArticleAvecPerle.belongsTo(Couleur);
 
-//N-AIR: CollierEtChaineAvecPerle: collier_chaine_bracelet - type de perle - couleur - nb perles  
-// CollierEtChaine.hasMany(CollierEtChaineAvecPerle);
-// TypeDePerle.hasMany(CollierEtChaineAvecPerle);
-// Couleur.hasMany(CollierEtChaineAvecPerle);
-// CollierEtChaineAvecPerle.belongsTo(CollierEtChaine);
-// CollierEtChaineAvecPerle.belongsTo(TypeDePerle);
-// CollierEtChaineAvecPerle.belongsTo(Couleur);
-
-Article.hasMany(ArticleAvecPerle);
-TypeDePerle.hasMany(ArticleAvecPerle);
-Couleur.hasMany(ArticleAvecPerle);
-ArticleAvecPerle.belongsTo(Article);
-ArticleAvecPerle.belongsTo(TypeDePerle);
-ArticleAvecPerle.belongsTo(Couleur);
 
 
 module.exports = {
@@ -175,13 +133,9 @@ module.exports = {
     Article, 
     Utilisateur, 
     Role, 
-    Facture, 
     Commande, 
     LigneDeCommande, 
     Taille,
-    CollierEtChaine,
-    Bague,
-    BouclesDoreilles,
     ArticleTaille,
     Couleur,
     TypeDePierre,
@@ -191,7 +145,6 @@ module.exports = {
     TypeDePerle,
     Mesure,
     GuideDeTailleArticle,
-    BouclesDoreillesAvecPerle,
-    CollierEtChaineAvecPerle,
-    ArticleAvecPerle
+    ArticleAvecPerle,
+    Gravure,
 }

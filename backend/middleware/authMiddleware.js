@@ -6,7 +6,6 @@ const {Utilisateur, Role} = require('../dev-data/schema');
 //protection de routes
 const protect = asyncHandler(async(req, res, next) => {
     let token; 
-
     //lecture du jwt dans le cookie
     token = req.cookies.jwt;
 

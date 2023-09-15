@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import {PayPalScriptProvider} from '@paypal/react-paypal-js'
 import './assets/styles/bootstrap.custom.css';
 import './assets/styles/index.css';
 import {
@@ -12,24 +13,66 @@ import {
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Articles from './screens/Articles';
+import Home from './screens/Home';
 import DetailArticle from './screens/DetailArticle';
 import Panier from './screens/Panier';
+import LoginTest from './screens/LoginTest';
+import Register from './screens/Register';
+import  store from './store';
+import { Provider } from 'react-redux';
+import HomeTest from './screens/HomeTest'
+import Verification from './screens/Verification';
+import PrivateRoute from './components/PrivateRoute';
+import Payement from './screens/Payement';
+import Commande from './screens/Commande';
+import DetailsCommande from './screens/DetailsCommande';
+import Profile from './screens/Profile';
+import AdminRoute from './components/AdminRoute'
+import CommandesList from './screens/admin/CommandesList';
+import MesCommandes from './screens/membre/MesCommandes';
+import ArticlesList from './screens/admin/ArticlesList';
+import EditArticle from './screens/admin/EditArticle';
+import UtilisateursList from './screens/admin/UtilisateursList';
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-        <Route index={true} path='/' element={<Articles />} /> 
+        <Route index={true} path='/' element={<Home />} /> 
         <Route path='/articles/:id' element={<DetailArticle />} /> 
         <Route path='/panier' element={<Panier />} />
+        <Route path='/login' element={<LoginTest />} />
+        <Route path='/register' element={<Register />} />
+        
+        {/* PRIVATE ROUTE */}
+        <Route path='' element={<PrivateRoute/>}>
+          <Route path='/verification' element={<Verification />} />
+          <Route path='/payement' element={<Payement />} />
+          <Route path='/commande' element={<Commande />} />
+          <Route path='/commandes/:id' element={<DetailsCommande />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route path='/mes_commandes' element={<MesCommandes />} />
+        </Route>
+
+        {/* ADMIN ROUTE */}
+        <Route path='' element={<AdminRoute/>}>
+          <Route path='/admin/commandes_list' element={<CommandesList />} />
+          <Route path='/admin/articles_list' element={<ArticlesList />} />
+          <Route path='/admin/articles/:id/edit' element={<EditArticle />} />
+          <Route path='/admin/utilisateurs_list' element={<UtilisateursList />} />
+        </Route>
+        {/* <Route path='/test' element={<HomeTest />} /> */}
     </Route>
 )
 )
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />  
+    <Provider store={store}>
+    <PayPalScriptProvider deferLoading={true}>
+      <RouterProvider router={router} />  
+    </PayPalScriptProvider>
+    </Provider>
   </React.StrictMode>
 );
 

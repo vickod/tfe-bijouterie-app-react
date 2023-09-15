@@ -8,19 +8,28 @@ const generateToken = require('../config/generateToken');
 // @access Public
 const registerUser = asyncHandler(async(req,res, next) =>{
     const {nom, prenom, email, telephone, adresse, password} = req.body;
+    
     const utilisateurExistant = await Utilisateur.findOne({
         where: {email: email}
     });
+
+    const trimmedNom = nom ? nom.trim() : '';
+    const trimmedPrenom = prenom ? prenom.trim() : '';
+    const trimmedEmail = email ? email.trim() : '';
+    const trimmedTelephone = telephone ? telephone.trim() : '';
+    const trimmedAdresse = adresse ? adresse.trim() : '';
+
     if(utilisateurExistant){
         res.status(400);
         throw new Error('cet utilisateur existe dans notre base de donnée.')
     }
+    
     const newUtilisateur = await Utilisateur.create({
-        nom: nom,
-        prenom: prenom,
-        email:email,
-        telephone: telephone,
-        adresse: adresse,
+        nom: trimmedNom,
+        prenom: trimmedPrenom,
+        email: trimmedEmail,
+        telephone: trimmedTelephone,
+        adresse: trimmedAdresse,
         password: await hashPassword(password),
         roleId: 1,
     });
@@ -28,14 +37,14 @@ const registerUser = asyncHandler(async(req,res, next) =>{
         generateToken(res, newUtilisateur.id); // token
 
         res.status(201).json({
-            id: newUtilisateur.id,
+            //id: newUtilisateur.id,
             nom: newUtilisateur.nom,
             prenom: newUtilisateur.prenom,
             email:newUtilisateur.email,
             telephone: newUtilisateur.telephone,
             adresse: newUtilisateur.adresse,
-            password: newUtilisateur.password,
-            roleId: newUtilisateur.roleId,
+            //password: newUtilisateur.password,
+            //roleId: newUtilisateur.roleId,
         })
     }else{
         res.status(400);
@@ -50,6 +59,7 @@ const registerUser = asyncHandler(async(req,res, next) =>{
 // @access Public
 const authUser = asyncHandler(async(req,res, next) =>{
     const {email, password} = req.body;
+    //console.log("email:"+email+" password:"+password)
     const utilisateur = await Utilisateur.findOne({
         where: {email: email}
     });
@@ -98,6 +108,7 @@ const getUserProfile = asyncHandler(async(req,res) =>{
             nom: utilisateur.nom,
             prenom: utilisateur.prenom,
             email: utilisateur.email,
+            telephone: utilisateur.telephone,
             adresse: utilisateur.adresse,
             //roleId: utilisateur.roleId,
         })
@@ -112,7 +123,7 @@ const getUserProfile = asyncHandler(async(req,res) =>{
 //@route PUT /api/utilisateurs/profile
 // @access Private
 const updateUserProfile = asyncHandler(async(req,res) =>{
-    const utilisateur = await Utilisateur.findByPk(req.utilisateur.id);
+    const utilisateur = await Utilisateur.findByPk(req.body.utilisateurId);
 
     if(utilisateur) {   
         const updatedUtilisateur = await utilisateur.update({
@@ -120,6 +131,7 @@ const updateUserProfile = asyncHandler(async(req,res) =>{
             prenom: req.body.prenom || utilisateur.prenom,
             email:req.body.email || utilisateur.email,
             adresse: req.body.adresse || utilisateur.adresse,
+            telephone: req.body.telephone || utilisateur.telephone,
             password: req.body.password ? await hashPassword(req.body.password) : utilisateur.password
         })
         res.status(200).json({
@@ -127,6 +139,7 @@ const updateUserProfile = asyncHandler(async(req,res) =>{
             nom: updatedUtilisateur.nom,
             prenom: updatedUtilisateur.prenom,
             email: updatedUtilisateur.email,
+            telephone: updatedUtilisateur.telephone,
             adresse: updatedUtilisateur.adresse,
             password: updatedUtilisateur.password
             //roleId: utilisateur.roleId,
@@ -143,14 +156,27 @@ const updateUserProfile = asyncHandler(async(req,res) =>{
 //@route GET /api/utilisateurs
 // @access Private/Admin
 const getUsers = asyncHandler(async(req,res) =>{
-    res.send('get users')
+    console.log("tentative d'acces a la route getUsers")
+    const utilisateurs = await Utilisateur.findAll({});
+    res.status(200).json(utilisateurs)
+   
 })
 
 //@desc Get utilisateur 
 //@route GET /api/utilisateurs/:id
 // @access Private/Admin
 const getUserById = asyncHandler(async(req,res) =>{
-    res.send('get user by id')
+    const utilisateur = await Utilisateur.findOne({
+        where: { id: req.params.id },
+        attributes: {
+          exclude: ['password'] 
+        }
+    })
+    if(utilisateur) {
+        res.status(200).json(utilisateur)
+    }else {
+        throw new Error('utilisateur introuvable')
+    }
 })
 
 
@@ -158,7 +184,34 @@ const getUserById = asyncHandler(async(req,res) =>{
 //@route PUT /api/utilisateurs/:id
 // @access Private/Admin
 const updateUser = asyncHandler(async(req,res) =>{
-    res.send('update user')
+    const utilisateur = await Utilisateur.findByPk(req.params.id);
+
+    if(utilisateur) {
+        const updatedUtilisateur = await Utilisateur.update(
+            {where: {id: req.params.id}},
+            {
+            nom: req.body.nom || utilisateur.nom,
+            prenom: req.body.prenom || utilisateur.prenom,
+            email: req.body.email || utilisateur.email,
+            telephone: req.body.telephone || utilisateur.telephone,
+            adresse: req.body.adresse || utilisateur.adresse,
+            }
+        )
+        res.status(200).json({
+           id: updatedUtilisateur.id,
+           nom: updatedUtilisateur.nom, 
+           prenom: updatedUtilisateur.prenom,
+           email: updatedUtilisateur.email,
+           telephone: updatedUtilisateur.telephone,
+           adresse: updatedUtilisateur.adresse,
+           roleId: updatedUtilisateur.roleId,
+        })
+    }
+    else {
+        res.status(404)
+        throw new Error('utilisateur introuvable')
+    }
+    
 })
 
 
@@ -166,7 +219,20 @@ const updateUser = asyncHandler(async(req,res) =>{
 //@route DELETE /api/utilisateurs/:id
 // @access Private/Admin
 const deleteUser = asyncHandler(async(req,res) =>{
-    res.send('delete user')
+    const utilisateur = await Utilisateur.findByPk(req.params.id);
+    if(utilisateur) {
+        if(utilisateur.roleId === 2) {
+            res.status(400);
+            throw new Error('impossible de supprimer un admin.')
+        }
+        await Utilisateur.destroy({
+            where:{id: req.params.id}
+        });
+        res.status(200).json({message: "l'utilisateur a été supprimé."})  
+    }else {
+        res.status(404);
+        throw new Error('utilisateur introuvable')
+    }  
 })
 
 
