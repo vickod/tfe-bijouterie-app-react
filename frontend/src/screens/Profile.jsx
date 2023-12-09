@@ -20,6 +20,7 @@ const Profile = () => {
     const [rue, setRue] = useState("");
     const [cp, setCp] = useState("");
     const [ville, setVille] = useState("");
+    const [role, setRole] = useState(1);
 
     const dispatch = useDispatch();
     const {userInfo} = useSelector((state) => state.auth);
@@ -44,24 +45,94 @@ const Profile = () => {
         if (userInfo.adresse) {
             setAdresse(userInfo.adresse);
         }
+        if (userInfo.role) {
+          setRole(userInfo.role);
+      }
     }
     }, [userInfo])
 
     const submitHandlerProfile = async (e) => {
         e.preventDefault();
+        const verifNom = /^[a-zA-Z]{2,}$/
+        const verifEmail = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/
+        const verifTel = /^\+?\d{1,3}\d{1,11}$/
+
+        //const verifPassword = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&-_\s]{6,}$/
         try {
+          if (nom && !verifNom.test(nom) ) {
+            toast.error("Veuillez utiliser un nom valide", {
+              position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
+              autoClose: 5000, // Ferme automatiquement après 5 secondes
+              hideProgressBar: true, // Affiche la barre de progression
+              closeOnClick: true, // Ferme le toast lorsqu'on clique dessus
+              pauseOnHover: true, // Met en pause le temps d'affichage en survolant
+              draggable: true, // Permet de faire glisser le toast
+              progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée
+          });
+          }
+          else if (prenom && !verifNom.test(prenom)) {
+            toast.error("Veuillez utiliser un prenom valide ", {
+              position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
+              autoClose: 5000, // Ferme automatiquement après 5 secondes
+              hideProgressBar: true, // Affiche la barre de progression
+              closeOnClick: true, // Ferme le toast lorsqu'on clique dessus
+              pauseOnHover: true, // Met en pause le temps d'affichage en survolant
+              draggable: true, // Permet de faire glisser le toast
+              progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée
+          });
+          }
+          else if (email && !verifEmail.test(email)) {
+            toast.error("Veuillez utiliser un e-mail valide ", {
+              position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
+              autoClose: 5000, // Ferme automatiquement après 5 secondes
+              hideProgressBar: true, // Affiche la barre de progression
+              closeOnClick: true, // Ferme le toast lorsqu'on clique dessus
+              pauseOnHover: true, // Met en pause le temps d'affichage en survolant
+              draggable: true, // Permet de faire glisser le toast
+              progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée
+          });
+          }
+          else if (telephone && !verifTel.test(telephone)) {
+            toast.error("Veuillez utiliser un numero de telephone valide ", {
+              position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
+              autoClose: 5000, // Ferme automatiquement après 5 secondes
+              hideProgressBar: true, // Affiche la barre de progression
+              closeOnClick: true, // Ferme le toast lorsqu'on clique dessus
+              pauseOnHover: true, // Met en pause le temps d'affichage en survolant
+              draggable: true, // Permet de faire glisser le toast
+              progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée
+          });
+          }
+          else if (password && password.length < 6) {
+            toast.error("Le mot de passe doit etre d'au moins 6 caracteres", {
+              position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
+              autoClose: 5000, // Ferme automatiquement après 5 secondes
+              hideProgressBar: true, // Affiche la barre de progression
+              closeOnClick: true, // Ferme le toast lorsqu'on clique dessus
+              pauseOnHover: true, // Met en pause le temps d'affichage en survolant
+              draggable: true, // Permet de faire glisser le toast
+              progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée
+          });
+          }else {
             const res = await majProfile({utilisateurId: userInfo.id, 
-                nom, prenom,email, telephone, password}).unwrap();
-                dispatch(setCredentials(res));
-                toast.success('Profile mis a jour avec succes',{
-                  position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
-                  autoClose: 5000, // Ferme automatiquement après 5 secondes
-                  hideProgressBar: true, // Affiche la barre de progression
-                  closeOnClick: true, // Ferme le toast lorsqu'on clique dessus
-                  pauseOnHover: true, // Met en pause le temps d'affichage en survolant
-                  draggable: true, // Permet de faire glisser le toast
-                  progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée
-              })
+              nom: nom.charAt(0).toUpperCase()+nom.slice(1).toLowerCase(), 
+              prenom: prenom.charAt(0).toUpperCase()+prenom.slice(1).toLowerCase(),
+              email: email.toLowerCase(), 
+              telephone, 
+              password}).unwrap();
+              dispatch(setCredentials(res));
+              //localStorage.setItem('userInfo', JSON.stringify(res))
+              toast.success('Profile mis a jour avec succes',{
+                position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
+                autoClose: 5000, // Ferme automatiquement après 5 secondes
+                hideProgressBar: true, // Affiche la barre de progression
+                closeOnClick: true, // Ferme le toast lorsqu'on clique dessus
+                pauseOnHover: true, // Met en pause le temps d'affichage en survolant
+                draggable: true, // Permet de faire glisser le toast
+                progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée
+            })
+          }
+            
 
         }catch(err) {
             toast.error(err?.data?.message || err.error,{
@@ -79,14 +150,57 @@ const Profile = () => {
 
     const submitHandlerAdresse = async (e) => {
       e.preventDefault();
-      let nouvelleAdresse;
-      try {
-        if(rue && cp && ville) {
-          nouvelleAdresse = `${rue} ${cp} ${ville}`
+
+      let nouvelleAdresse; 
+      const verifRue = /^[a-zA-Z\s]+ \d+[a-zA-Z]?$/;
+      const verifCp = /^\d{2,}$/
+      
+      if(!rue || !cp || !ville) {
+        toast.error("Veuillez remplir tous les champs de l'adresse", {
+          position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
+          autoClose: 5000, // Ferme automatiquement après 5 secondes
+          hideProgressBar: true, // Affiche la barre de progression
+          closeOnClick: true, // Ferme le toast lorsqu'on clique dessus
+          pauseOnHover: true, // Met en pause le temps d'affichage en survolant
+          draggable: true, // Permet de faire glisser le toast
+          progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée
+      });
+      }else if (ville.length < 2 || rue.length < 3 || !verifCp.test(cp) ) {
+        toast.error("Vos données doivent être valides", {
+          position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
+          autoClose: 5000, // Ferme automatiquement après 5 secondes
+          hideProgressBar: true, // Affiche la barre de progression
+          closeOnClick: true, // Ferme le toast lorsqu'on clique dessus
+          pauseOnHover: true, // Met en pause le temps d'affichage en survolant
+          draggable: true, // Permet de faire glisser le toast
+          progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée
+      });
+      }
+      else if (!verifRue.test(rue)) {
+        toast.error("Vous devez respecter le format (rue + numero) ", {
+          position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
+          autoClose: 5000, // Ferme automatiquement après 5 secondes
+          hideProgressBar: true, // Affiche la barre de progression
+          closeOnClick: true, // Ferme le toast lorsqu'on clique dessus
+          pauseOnHover: true, // Met en pause le temps d'affichage en survolant
+          draggable: true, // Permet de faire glisser le toast
+          progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée
+      });
+      }
+      else {
+        try {
+          nouvelleAdresse = rue && cp && ville ? `
+          ${rue.replace(/\s+/g, ' ').charAt(0).toUpperCase()+rue.slice(1).toLowerCase()}, ${cp} ${ville.replace(/\s+/g, ' ').charAt(0).toUpperCase()+ville.slice(1).toLowerCase()}` : "";
           const res = await majProfile({utilisateurId: userInfo.id, 
-            adresse: nouvelleAdresse}).unwrap();
+            nom:"",
+            prenom:"",
+            telephone:"",
+            email: "",
+            password:"",
+            adresse: nouvelleAdresse.trim()}).unwrap();
               dispatch(setCredentials(res));
-              toast.success('Profile mis a jour avec succes', {
+              //localStorage.setItem('userInfo', JSON.stringify(res))
+              toast.success('Adresse mis a jour avec succes', {
                 position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
                 autoClose: 5000, // Ferme automatiquement après 5 secondes
                 hideProgressBar: true, // Affiche la barre de progression
@@ -95,33 +209,23 @@ const Profile = () => {
                 draggable: true, // Permet de faire glisser le toast
                 progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée
             });
-        }else{
-          toast.error("Pour modifier votre adresse, veuillez remplir tous les champs",{
-            position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
-            autoClose: 5000, // Ferme automatiquement après 5 secondes
-            hideProgressBar: true, // Affiche la barre de progression
-            closeOnClick: true, // Ferme le toast lorsqu'on clique dessus
-            pauseOnHover: true, // Met en pause le temps d'affichage en survolant
-            draggable: true, // Permet de faire glisser le toast
-            progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée)
-        })
-      }  
-      }catch(err) {
-          toast.error(err?.data?.message || err.error, {
-            position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
-            autoClose: 5000, // Ferme automatiquement après 5 secondes
-            hideProgressBar: true, // Affiche la barre de progression
-            closeOnClick: true, // Ferme le toast lorsqu'on clique dessus
-            pauseOnHover: true, // Met en pause le temps d'affichage en survolant
-            draggable: true, // Permet de faire glisser le toast
-            progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée
-        })
+        }catch(err) {
+            toast.error(err?.data?.message || err.error, {
+              position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
+              autoClose: 5000, // Ferme automatiquement après 5 secondes
+              hideProgressBar: true, // Affiche la barre de progression
+              closeOnClick: true, // Ferme le toast lorsqu'on clique dessus
+              pauseOnHover: true, // Met en pause le temps d'affichage en survolant
+              draggable: true, // Permet de faire glisser le toast
+              progress: undefined, // Peut être utilisé pour définir une valeur de progression personnalisée
+          })
+        }
       }
   }
 
-  const handlerChangeAdresse = () => {
+  // const handlerChangeAdresse = () => {
     
-  }
+  // }
 
   return (
     <>
@@ -216,7 +320,7 @@ const Profile = () => {
           <Form.Group controlId="Code postale" className="my-2">
             <Form.Label>Code postale:</Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               placeholder="code postale"
               value={cp}
               onChange={(e) => setCp(e.target.value)}
@@ -236,7 +340,7 @@ const Profile = () => {
           <Button type="submit" variant="primary" className="my-2">
             Mettre a jour mon adresse
           </Button>
-          {loadingMajProfile && <Loader />}
+          {/* {loadingMajProfile && <Loader />} */}
         </Form>
         </Col>
 

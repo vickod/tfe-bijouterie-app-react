@@ -6,29 +6,28 @@ const  {
     getMaCommandeById,
     updateCommandeToPaid,
     updateCommandeToDelivered,
-    getCommandes
+    getCommandes,
 } = require('../controllers/commandes.Controllers');
-const {protect, admin} = require('../middleware/authMiddleware');
+const {protect, client, admin, livreur} = require('../middleware/authMiddleware');
 
 
 
 router.route('/')
-.post(protect,addCommandes)
+.post(protect,client, addCommandes)
 .get(protect, admin, getCommandes);
 
 router.route('/mes_commandes')
-.get(protect, getMesCommandes)
+.get(protect, client, getMesCommandes)
 
 router.route('/:id')
 .get(protect, getMaCommandeById)
 
 
-router.route('/:id/pay')
-.put(protect, updateCommandeToPaid)
+// router.route('/:id/pay')
+// .put(protect, updateCommandeToPaid)
 
 router.route('/:id/deliver')
 .put(protect, admin, updateCommandeToDelivered)
-
 
 
 

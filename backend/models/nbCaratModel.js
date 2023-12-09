@@ -9,7 +9,7 @@ const NbCarats = sequelize.define('nbCarat', {
   },
     valeur: {
       type: Sequelize.STRING,
-      allowNull: true
+      allowNull: false,
     }
   },{timestamps: false});
 

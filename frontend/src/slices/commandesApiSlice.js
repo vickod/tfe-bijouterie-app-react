@@ -1,5 +1,5 @@
 import {apiSlice} from './apiSlice';
-import {COMMANDES_URL, PAYPAL_URL} from '../constants';
+import {COMMANDES_URL, PAYPAL_URL, LIVRAISON_URL} from '../constants';
 
 
 export const commandesApiSlice = apiSlice.injectEndpoints({
@@ -55,6 +55,23 @@ export const commandesApiSlice = apiSlice.injectEndpoints({
                 method: 'PUT',
             }),
             keepUnusedDataFor: 5, 
+        }),
+
+      
+        //LIVREUR:
+        getCommandesLivreur: builder.query({
+            query: () => ({
+                url: `${LIVRAISON_URL}`,
+                method: 'GET',
+            }),
+            keepUnusedDataFor: 5, 
+        }),
+        commandeDeliverLivreur: builder.mutation({
+            query: (commandeId) => ({
+                url: `${LIVRAISON_URL}/${commandeId}/deliver/livreur`,
+                method: 'PUT',
+            }),
+            keepUnusedDataFor: 5, 
         })
     })
 })
@@ -65,4 +82,6 @@ export const {useCreateCommandeMutation,
     useGetMesCommandesQuery,
     useGetCommandesQuery,
     useCommandeDeliverMutation,
+    useCommandeDeliverLivreurMutation,
+    useGetCommandesLivreurQuery,
 } = commandesApiSlice;

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import {useLogoutMutation} from '../slices/utilisateursSlice';
 import {logout} from '../slices/authSlice';
 import { effacerPanier } from "../slices/panierSlice";
+import { useEffect, useState } from 'react';
 
 const Header = () => {
   const {articlesDuPanier} = useSelector((state) => state.panier)
@@ -16,6 +17,19 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [logoutApiCall] = useLogoutMutation();
+  const [role, setRole] = useState("");
+
+  console.log(userInfo && userInfo.role)
+
+
+  // useEffect(()=> {
+  //   if(userInfo) {
+  //     //      console.log("user info", userInfo);
+  //   }
+  // }, [userInfo])
+
+
+
   
   const logoutHandler = async () => {
       try {
@@ -41,7 +55,8 @@ const Header = () => {
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="ms-auto">
+
+            {/* <Nav className="ms-auto">
               <LinkContainer to="/panier">
                 <Nav.Link>
                   <FaShoppingCart /> Panier
@@ -57,6 +72,7 @@ const Header = () => {
               </LinkContainer>
               {userInfo ? (
                 <NavDropdown title={userInfo.prenom} id='username'>
+                
                 <LinkContainer to="/profile">
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                 </LinkContainer>
@@ -74,7 +90,6 @@ const Header = () => {
               </LinkContainer>
               )}
 
-
               {userInfo && userInfo.role === 2 && (
                 <NavDropdown title='Admin' id='adminName'>
                 <LinkContainer to="/admin/articles_list">
@@ -86,11 +101,81 @@ const Header = () => {
                 <LinkContainer to="/admin/commandes_list">
                     <NavDropdown.Item>Commandes</NavDropdown.Item>
                 </LinkContainer>
+                <NavDropdown.Item onClick={logoutHandler}>Se deconnecter</NavDropdown.Item>
                 </NavDropdown>
+              )}   
+
+              {userInfo && userInfo.role === 3 && (
+                <NavDropdown title='livreur' id='livreur'>
+                <LinkContainer to="/livreur/commandes_list">
+                    <NavDropdown.Item>A livrer</NavDropdown.Item>
+                </LinkContainer>
+                <NavDropdown.Item onClick={logoutHandler}>Se deconnecter</NavDropdown.Item>
+                </NavDropdown>
+              )}     
+            </Nav> */}
+
+
+            
+            <Nav className="ms-auto">
+            
+              <LinkContainer to="/panier">
+                <Nav.Link>
+                  <FaShoppingCart /> Panier
+                  {
+                    articlesDuPanier.length > 0 && (
+                      <Badge pill bg='danger' style={{marginLeft: '5px'}}>
+                        {articlesDuPanier.reduce((accumulation, article) => 
+                        accumulation+ article.qty, 0)}
+                      </Badge>
+                    )
+                  }
+                </Nav.Link>
+              </LinkContainer>
+              {userInfo && (userInfo.role === 1 || userInfo.roleId === 1 ) ? (
+                <NavDropdown title={userInfo.prenom} id='username'>
+                <LinkContainer to="/profile">
+                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to="/mes_commandes">
+                    <NavDropdown.Item>Mes commandes</NavDropdown.Item>
+                </LinkContainer>
+                    <NavDropdown.Item onClick={logoutHandler}>Se deconnecter</NavDropdown.Item>
+                </NavDropdown> 
+              ) : userInfo && (userInfo.role === 2 || userInfo.roleId === 2) ? ( 
+                <NavDropdown title='Admin' id='adminName'>
+                <LinkContainer to="/admin/articles_list">
+                    <NavDropdown.Item>Articles</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to="/admin/utilisateurs_list">
+                    <NavDropdown.Item>Utilisateurs</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer to="/admin/commandes_list">
+                    <NavDropdown.Item>Commandes</NavDropdown.Item>
+                </LinkContainer>
+                <NavDropdown.Item onClick={logoutHandler}>Se deconnecter</NavDropdown.Item>
+                </NavDropdown>
+
+              ): userInfo && (userInfo.role === 3 || userInfo.roleId === 3) ? ( 
+                <NavDropdown title='livreur' id='livreur'>
+                <LinkContainer to="/livreur/commandes_list">
+                    <NavDropdown.Item>A livrer</NavDropdown.Item>
+                </LinkContainer>
+                <NavDropdown.Item onClick={logoutHandler}>Se deconnecter</NavDropdown.Item>
+                </NavDropdown>
+
+              ):(
+                <LinkContainer to="/login">
+                <Nav.Link href='/login'>
+                  <FaUser />
+                  Se connecter
+                </Nav.Link>
+              </LinkContainer>
               )}
-              
-              
-            </Nav>
+
+              </Nav>
+
+           
           </Navbar.Collapse>
         </Container>
       </Navbar>

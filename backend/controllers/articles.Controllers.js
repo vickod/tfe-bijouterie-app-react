@@ -109,13 +109,15 @@ const getArticlesList = asyncHandler(async (req, res, next) => {
     const tailles = await Taille.findAll()
     const selections = await Selection.findAll()
     const categories = await Categorie.findAll()
+    const articlesTailles = await ArticleTaille.findAll()
 
     if(articles){
         res.json({
             articles,
             tailles,
             selections,
-            categories
+            categories,
+            articlesTailles,
         })
     }
     else {
@@ -130,11 +132,11 @@ const getArticlesList = asyncHandler(async (req, res, next) => {
 const createArticle = asyncHandler(async (req, res, next) => {
     const article = await Article.create({
         nom : "nouvel article",
+        type:"",
         prix: 0, 
         message: "description",
-        image: '/image/sample.jpg',
+        image: 'aucune image',
     })
-    console.log("test")
     if(article){
         res.json({
             article,
@@ -150,17 +152,16 @@ const createArticle = asyncHandler(async (req, res, next) => {
 //@route PUT /api/articles/:id
 //@access private/admin
 const updateArticle = asyncHandler(async (req, res, next) => {
-    const {nom, 
-        prix, 
+    const {
+        nom, 
+        prix,
+        type, 
         message, 
         image, 
         categorie, 
         selection, 
         matiere, 
         carats, 
-        isDataArticle, 
-        isDataNewTaille, 
-        
     } = req.body;
     
     const article = await Article.findByPk(req.params.id);
@@ -172,16 +173,18 @@ const updateArticle = asyncHandler(async (req, res, next) => {
 
     let updatedArticle;
    if(article){
+       console.log("voici l'article :"+nom)
        updatedArticle = await Article.update(
             {
-            nom: nom,
-            prix: prix,
-            message: message,
-            image: image,
-            categorieId: categorieId.id,
-            selectionId: selectionId.id,
-            typeDeMatiereId: matiereId.id,
-            nbCaratId: caratId.id,
+            nom: nom || article.nom,
+            type: type || article.type,
+            prix: prix || article.prix,
+            message: message || article.message,
+            image: image || article.image,
+            categorieId: categorieId.id || article.categorieId,
+            selectionId: selectionId.id || article.selectionId,
+            typeDeMatiereId: matiereId.id || article.matiereId,
+            nbCaratId: caratId.id || article.caratId,
             },
             {where: {id: req.params.id}},
         )
@@ -205,11 +208,79 @@ const ajoutDeTaille = asyncHandler(async (req, res, next) => {
         largeur,
         epaisseur, 
     } = req.body;
-    
+    const taille = await Taille.findOne({where:{taille: addTaille}})
     const article = await Article.findByPk(req.params.id);
+   
 
    if(article){
-        const newTaille = await Taille.create(
+        if(taille) {
+            await ArticleTaille.create(
+                {
+                    stock: 0,
+                    articleId: req.params.id,
+                    tailleId: taille.id
+                },
+            )
+            if(poids) {
+                await GuideDeTailleArticle.create(
+                    {
+                        valeur_mesure: poids,
+                        unite_mesure: 'g',
+                        articleId: req.params.id,
+                        mesureId: 1,
+                        tailleId: taille.id
+                    },
+                )
+            }
+            if(diametre) {
+                await GuideDeTailleArticle.create(
+                    {
+                        valeur_mesure: diametre,
+                        unite_mesure: 'mm',
+                        articleId: req.params.id,
+                        mesureId: 2,
+                        tailleId: taille.id
+                    },
+                )
+            }
+            if(longeur) {
+                await GuideDeTailleArticle.create(
+                    {
+                        valeur_mesure: longeur,
+                        unite_mesure: 'mm',
+                        articleId: req.params.id,
+                        mesureId: 3,
+                        tailleId: taille.id
+                    },
+                )
+            }
+            if(largeur) {
+                await GuideDeTailleArticle.create(
+                    {
+                        valeur_mesure: largeur,
+                        unite_mesure: 'mm',
+                        articleId: req.params.id,
+                        mesureId: 4,
+                        tailleId: taille.id
+                    },
+                )
+            }
+            if(epaisseur) {
+                await GuideDeTailleArticle.create(
+                    {
+                        valeur_mesure: epaisseur,
+                        unite_mesure: 'mm',
+                        articleId: req.params.id,
+                        mesureId: 5,
+                        tailleId: taille.id
+                    },
+                )
+            }
+            res.json(taille)
+            
+        } else {
+
+            const newTaille = await Taille.create(
                 {
                 taille: addTaille
                 },
@@ -277,6 +348,9 @@ const ajoutDeTaille = asyncHandler(async (req, res, next) => {
             )
         }
         res.json(newTaille)
+        }
+        
+        
     }  
     else {
         res.status(404);
@@ -305,11 +379,11 @@ const supprimerTaille = asyncHandler(async (req, res, next) => {
                 where: {articleId: req.params.id, tailleId: supprimerTaille}
             },
         )    
-        await Taille.destroy(
-            {
-                where: {id: supprimerTaille}
-            },
-        )    
+        // await Taille.destroy(
+        //     {
+        //         where: {id: supprimerTaille}
+        //     },
+        // )    
         res.json(deletedTaille)
     }  
     else {
@@ -348,6 +422,113 @@ const modifierStock = asyncHandler(async (req, res, next) => {
 
 
 
+const modifierPierre = asyncHandler(async (req, res, next) => {
+    const article = await Article.findByPk(req.params.id);
+    const { 
+        typeDePierre,
+        nbPierres,
+        couleurPierre,
+        nbCtPierres
+    } = req.body;
+     
+   if(article){
+        const pierre = await TypeDePierre.findOne({ where: { nom: typeDePierre } });
+        const couleur = await Couleur.findOne({ where: { nom: couleurPierre } });
+        const existeDeja = await pierre.hasCouleur(couleur);
+        if (!existeDeja) {
+            await pierre.addCouleur(couleur);
+        } 
+        const createPierre = await ArticleAvecPierre.create({
+            nbPierres: nbPierres,
+            nbCarats: nbCtPierres,
+            articleId: req.params.id,
+            typeDePierreId: pierre.id,
+            couleurId: couleur.id
+        })  
+        
+        console.log("OK")
+        console.log(createPierre)
+        res.json("OK")
+    }  
+    else {
+        res.status(404);
+        throw new Error("l'article n'a pas pu se mettre a jour")
+    }
+})
+
+const modifierPerle = asyncHandler(async (req, res, next) => {
+    const article = await Article.findByPk(req.params.id);
+    const { 
+        typeDePerle,
+        nbPerles,
+        couleurPerle,
+    } = req.body;
+     
+   if(article){
+        const perle = await TypeDePerle.findOne({ where: { type: typeDePerle } });
+        //const existPerle = await ArticleAvecPerle.findAll()
+        const couleur = await Couleur.findOne({ where: { nom: couleurPerle } });
+        const existeDeja = await perle.hasCouleur(couleur);
+        if (!existeDeja) {
+            await perle.addCouleur(couleur);
+        } 
+        // if (!existeDeja) {
+        //     await perle.addCouleur(couleur);
+        // } 
+        const createPerle = await ArticleAvecPerle.create({
+            nbPerles: nbPerles,
+            articleId: req.params.id,
+            typeDePerleId: perle.id,
+            couleurId: couleur.id
+        })  
+        res.json("OK")
+    }  
+    else {
+        res.status(404);
+        throw new Error("l'article n'a pas pu se mettre a jour")
+    }
+})
+
+
+const supprimerPierre = asyncHandler(async (req, res, next) => {
+    const { 
+        supprimerPierre,
+    } = req.body;
+    const article = await Article.findByPk(req.params.id);
+
+   if(article){     
+        const deletePierre = await ArticleAvecPierre.destroy(
+            {
+                where: {articleId: req.params.id, typeDePierreId: supprimerPierre}
+            },
+        )
+        res.json(deletePierre)
+    }  
+    else {
+        res.status(404);
+        throw new Error("l'article n'a pas pu se mettre a jour")
+    }
+})
+
+const supprimerPerle = asyncHandler(async (req, res, next) => {
+    const { 
+        supprimerPerle,
+    } = req.body;
+    const article = await Article.findByPk(req.params.id);
+
+   if(article){     
+        const deletePerle = await ArticleAvecPerle.destroy(
+            {
+                where: {articleId: req.params.id, typeDePerleId: supprimerPerle}
+            },
+        )
+        res.json(deletePerle)
+    }  
+    else {
+        res.status(404);
+        throw new Error("l'article n'a pas pu se mettre a jour")
+    }
+})
 
 
 
@@ -360,13 +541,37 @@ const modifierStock = asyncHandler(async (req, res, next) => {
 const deleteArticle = asyncHandler(async (req, res, next) => {
     
     const article = await Article.findByPk(req.params.id);
+    const guideDeTailleArticle = await GuideDeTailleArticle.findAll({where: {articleId:req.params.id}})
+    const articleAvecPerle = await ArticleAvecPerle.findAll({where: {articleId: req.params.id}})
+    const articleAvecPierre = await ArticleAvecPierre.findAll({where: {articleId: req.params.id}})
+    const articleTaille = await ArticleTaille.findAll({where: {articleId: req.params.id}})
 
 
    if(article){
+       if(guideDeTailleArticle) {
+        await GuideDeTailleArticle.destroy({
+            where: {articleId: req.params.id}
+           })
+       }
+       if(articleAvecPerle) {
+        await ArticleAvecPerle.destroy({
+            where: {articleId: req.params.id}
+           })
+       }
+       if(articleAvecPierre) {
+        await ArticleAvecPierre.destroy({
+            where: {articleId: req.params.id}
+           })
+       }
+       if(articleTaille) {
+        await ArticleTaille.destroy({
+            where: {articleId: req.params.id}
+           })
+       }
        await Article.destroy({
         where: {id: req.params.id}
        })
-        res.status(200).json({message: "article supprimé"})
+       res.status(200).json({message: "article supprimé"})
         //res.json(updatedArticle)
     }
     else {
@@ -436,7 +641,8 @@ const getOneArticle = asyncHandler(async (req, res, next) => {
 
 
 
-module.exports={getAllArticles, 
+module.exports={
+    getAllArticles, 
     getOneArticle, 
     getArticlesList, 
     createArticle, 
@@ -445,6 +651,10 @@ module.exports={getAllArticles,
     supprimerTaille, 
     modifierStock,
     deleteArticle,
+    modifierPierre,
+    modifierPerle,
+    supprimerPierre,
+    supprimerPerle
 }
 
 

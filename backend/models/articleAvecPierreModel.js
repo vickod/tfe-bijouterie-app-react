@@ -11,6 +11,10 @@ const ArticleAvecPierre = sequelize.define("articlesAvecPierres", {
     type: Sequelize.INTEGER,
     allowNull: false
 
+  },
+  nbCarats: {
+    type: Sequelize.FLOAT,
+    allowNull: true
   }
 },{timestamps: false});
 

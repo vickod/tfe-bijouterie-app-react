@@ -72,7 +72,7 @@ const Articles = () => {
  
   return (
     <div>
-      <h1>Tous les Articles</h1>
+      {/* <h1>Tous les Articles</h1> */}
       <Row>
         <Col xl={3} lg={4} md={6} sm={12}>
           

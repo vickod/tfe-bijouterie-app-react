@@ -88,6 +88,9 @@ const LoginTest = () => {
             <Col>
                 Pas encore inscrit? <Link to={redirect ? `/register?redirect=${redirect}`:'/'} >S'enregistrer</Link>
             </Col>
+            <Col>
+                  <Link to={`/forgot`} >Mot de passe oublier ?</Link>
+            </Col>
         </Row>
 
 

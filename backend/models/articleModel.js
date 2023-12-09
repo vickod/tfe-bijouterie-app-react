@@ -21,7 +21,7 @@ const Article = sequelize.define('article', {
     },
     prix: {
         type: Sequelize.FLOAT,
-        allowNull: false
+        allowNull: true,
     },
     message: {
         type: Sequelize.STRING,

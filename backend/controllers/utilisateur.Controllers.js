@@ -1,7 +1,9 @@
 const asyncHandler = require('../middleware/asyncHandler');
 const {Utilisateur, Role} = require('../dev-data/schema');
 const { hashPassword, comparePasswords } = require('../config/password_hash')
-const generateToken = require('../config/generateToken');
+const {generateToken, generateResetToken} = require('../config/generateToken');
+const mailer = require('../config/nodeMailer');
+const { where } = require('sequelize');
 
 //@desc Register utilisateur & get token
 //@route POST /api/utilisateurs
@@ -12,7 +14,6 @@ const registerUser = asyncHandler(async(req,res, next) =>{
     const utilisateurExistant = await Utilisateur.findOne({
         where: {email: email}
     });
-
     const trimmedNom = nom ? nom.trim() : '';
     const trimmedPrenom = prenom ? prenom.trim() : '';
     const trimmedEmail = email ? email.trim() : '';
@@ -44,8 +45,53 @@ const registerUser = asyncHandler(async(req,res, next) =>{
             telephone: newUtilisateur.telephone,
             adresse: newUtilisateur.adresse,
             //password: newUtilisateur.password,
-            //roleId: newUtilisateur.roleId,
+            roleId: newUtilisateur.roleId,
         })
+        const contact =  {
+            to: email,
+            subject: `🎉 Bienvenue chez V.Bijouterie ! `,
+            html: `<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Bienvenue chez V.Bijouterie</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f4f4f4;
+                        padding: 20px;
+                    }
+                    .container {
+                        max-width: 600px;
+                        margin: 0 auto;
+                        background-color: #fff;
+                        padding: 40px;
+                        border-radius: 10px;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                        text-align: center;
+                    }
+                    h2 {
+                        color: #333;
+                    }
+                    p {
+                        color: #666;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h2>Bienvenue chez V.Bijouterie</h2>
+                    <p>Merci ${nom} ${prenom} de vous être enregistré sur notre site V.Bijouterie. Nous sommes ravis de vous compter parmi nos clients.</p>
+                    <p>Découvrez notre collection exclusive de bijoux pour compléter votre style.</p>
+                    <p>Merci de nous faire confiance, et à bientôt sur V.Bijouterie !</p>
+                </div>
+            </body>
+            </html>
+            `
+          }
+          mailer(contact)
+
     }else{
         res.status(400);
         throw new Error("l'inscription a échoué")
@@ -75,8 +121,8 @@ const authUser = asyncHandler(async(req,res, next) =>{
             telephone: utilisateur.telephone,
             adresse: utilisateur.adresse,
             role: utilisateur.roleId,
-
         })
+          
     }else {
         res.status(401);
         throw new Error('Invalid email or password');
@@ -124,7 +170,16 @@ const getUserProfile = asyncHandler(async(req,res) =>{
 // @access Private
 const updateUserProfile = asyncHandler(async(req,res) =>{
     const utilisateur = await Utilisateur.findByPk(req.body.utilisateurId);
-
+    
+    const userExist = await Utilisateur.findOne({where: {email: req.body.email}})
+    
+    if(req.body.email) {
+        if(userExist && userExist.email !== utilisateur.email){
+            res.status(400);
+            throw new Error('cet email est deja associé a un utilisateur.')
+        }
+    }
+    
     if(utilisateur) {   
         const updatedUtilisateur = await utilisateur.update({
             nom : req.body.nom || utilisateur.nom,
@@ -132,7 +187,8 @@ const updateUserProfile = asyncHandler(async(req,res) =>{
             email:req.body.email || utilisateur.email,
             adresse: req.body.adresse || utilisateur.adresse,
             telephone: req.body.telephone || utilisateur.telephone,
-            password: req.body.password ? await hashPassword(req.body.password) : utilisateur.password
+            password: req.body.password ? await hashPassword(req.body.password) : utilisateur.password,
+            //roleId: utilisateur.roleId,
         })
         res.status(200).json({
             id: updatedUtilisateur.id,
@@ -141,8 +197,8 @@ const updateUserProfile = asyncHandler(async(req,res) =>{
             email: updatedUtilisateur.email,
             telephone: updatedUtilisateur.telephone,
             adresse: updatedUtilisateur.adresse,
-            password: updatedUtilisateur.password
-            //roleId: utilisateur.roleId,
+            //password: updatedUtilisateur.password
+            roleId: utilisateur.roleId,
         })
     }else {
         res.status(404);
@@ -166,14 +222,18 @@ const getUsers = asyncHandler(async(req,res) =>{
 //@route GET /api/utilisateurs/:id
 // @access Private/Admin
 const getUserById = asyncHandler(async(req,res) =>{
+    
+   
     const utilisateur = await Utilisateur.findOne({
         where: { id: req.params.id },
         attributes: {
           exclude: ['password'] 
         }
     })
+    const roles = await Role.findAll();
+    const userRole = await Role.findOne({where:{id: utilisateur.roleId}});
     if(utilisateur) {
-        res.status(200).json(utilisateur)
+        res.status(200).json({utilisateur, userRole, roles})
     }else {
         throw new Error('utilisateur introuvable')
     }
@@ -185,23 +245,25 @@ const getUserById = asyncHandler(async(req,res) =>{
 // @access Private/Admin
 const updateUser = asyncHandler(async(req,res) =>{
     const utilisateur = await Utilisateur.findByPk(req.params.id);
-    console.log("blablablablabla: voici l'admin"+ req.body.role)
-    let role;
-    // if(req.body.role){
-    //     role = 2;
-    // }else {
-    //     role = 1;
-    // }
+    let role =  await Role.findOne({where:{role:req.body.role}});
+    
+    const userExist = await Utilisateur.findOne({where: {email: req.body.email}})
+    if(userExist && userExist.email !== utilisateur.email){
+        res.status(400);
+        throw new Error('cet utilisateur existe dans notre base de donnée.')
+    }
+    
     if(utilisateur) {
-       
+        
         const updatedUtilisateur = await Utilisateur.update(
             {
             nom: req.body.nom || utilisateur.nom,
             prenom: req.body.prenom || utilisateur.prenom,
             email: req.body.email || utilisateur.email,
-            telephone: req.body.telephone || utilisateur.telephone,
+            telephone: req.body.telephone ? req.body.telephone : req.body.telephone === "" ? req.body.telephone: utilisateur.telephone,
             adresse: req.body.adresse || utilisateur.adresse,
-            //roleId: role || utilisateur.role,
+            password: req.body.password ? await hashPassword(req.body.password) : utilisateur.password,
+            roleId: parseInt(role.id) || utilisateur.roleId, 
             }, 
             {where: {id: req.params.id}}
         )
@@ -212,7 +274,7 @@ const updateUser = asyncHandler(async(req,res) =>{
            email: updatedUtilisateur.email,
            telephone: updatedUtilisateur.telephone,
            adresse: updatedUtilisateur.adresse,
-           //roleId: updatedUtilisateur.roleId,
+           roleId: updatedUtilisateur.roleId,
         })
     }
     else {
@@ -248,6 +310,9 @@ const deleteUser = asyncHandler(async(req,res) =>{
 
 
 
+
+
+
 module.exports = {
     authUser,
     registerUser,
@@ -258,4 +323,5 @@ module.exports = {
     updateUserProfile,
     deleteUser,
     getUserById,
+
 }

@@ -9,11 +9,11 @@ const LigneDeCommande = sequelize.define('ligne_de_commande', {
     },
     quantite: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
     },
     prix: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
     }
 },{timestamps: false})
 module.exports = LigneDeCommande

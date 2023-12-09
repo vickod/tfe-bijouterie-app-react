@@ -34,7 +34,10 @@ import ArticlesList from './screens/admin/ArticlesList';
 import EditArticle from './screens/admin/EditArticle';
 import UtilisateursList from './screens/admin/UtilisateursList';
 import EditUtilisateur from './screens/admin/EditUtilisateur';
-
+import LivreurRoute from './components/LivreurRoute'
+import Alivrer from './screens/livreur/Alivrer';
+import ForgotPassword from './screens/ForgotPassword';
+import ResetPassword from './screens/ResetPassword';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -44,7 +47,9 @@ const router = createBrowserRouter(
         <Route path='/panier' element={<Panier />} />
         <Route path='/login' element={<LoginTest />} />
         <Route path='/register' element={<Register />} />
-        
+        <Route path='/forgot' element={<ForgotPassword />} />
+        <Route path='/forgot/:token' element={<ResetPassword />} />
+
         {/* PRIVATE ROUTE */}
         <Route path='' element={<PrivateRoute/>}>
           <Route path='/verification' element={<Verification />} />
@@ -62,6 +67,11 @@ const router = createBrowserRouter(
           <Route path='/admin/articles/:id/edit' element={<EditArticle />} />
           <Route path='/admin/utilisateurs_list' element={<UtilisateursList />} />
           <Route path='/admin/utilisateurs/:id/edit' element={<EditUtilisateur />} />
+        </Route>
+
+        {/* LIVREUR ROUTE */}
+        <Route path='' element={<LivreurRoute/>}>
+          <Route path='/livreur/commandes_list' element={<Alivrer />} />
         </Route>
         {/* <Route path='/test' element={<HomeTest />} /> */}
     </Route>

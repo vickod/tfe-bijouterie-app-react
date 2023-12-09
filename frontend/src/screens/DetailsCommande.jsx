@@ -4,7 +4,8 @@ import Message from "../components/Message"
 import Loader from "../components/Loader"
 import { useGetDetailsCommandeQuery, 
   usePayCommandeMutation, 
-  useCommandeDeliverMutation, 
+  useCommandeDeliverMutation,
+  useCommandeDeliverLivreurMutation 
 } from "../slices/commandesApiSlice"
 import React from 'react';
 import {toast} from 'react-toastify'
@@ -16,6 +17,7 @@ const {id: commandeId} = useParams();
 const {data, refetch, isLoading, isError} = useGetDetailsCommandeQuery(commandeId);
 const [payCommande, {isLoading: loadingPay}] = usePayCommandeMutation();
 const [commandeDeliver, {isLoading: loadingDeliver}] = useCommandeDeliverMutation();
+const [commandeDeliverLivreur] = useCommandeDeliverLivreurMutation();
 
 //console.log(data? data.ligneDeCommande : "")
 const {userInfo} = useSelector((state) => state.auth);
@@ -27,6 +29,17 @@ if (data && data.commande && data.commande.paidAt) {
   paidAtFormatted = paidAtDate.toLocaleDateString('fr-FR', options); 
 } else {
   paidAtFormatted = "Date non disponible";
+}
+function formatDateDeliver() {
+  let deliveredAtFormatted;
+  if (data && data.commande && data.commande.deliveredAt) {
+    const deliveredAt = new Date(data.commande.paidAt);
+    const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+    deliveredAtFormatted = deliveredAt.toLocaleDateString('fr-FR', options); 
+  } else {
+    deliveredAtFormatted = "Date non disponible";
+  }
+  return deliveredAtFormatted
 }
 
 const total = data ? data.commande.total : null
@@ -42,9 +55,15 @@ const tvaAvecRabais = data ? (prixPlein-prixHTVAAvecRabais).toFixed(2) : null
 
 const deliverHandler = async () => {
   try {
-      await commandeDeliver(commandeId);
+      if(userInfo.role === 2) {
+        await commandeDeliver(commandeId);
+      }
+      if(userInfo.role === 3) {
+        await commandeDeliverLivreur(commandeId)
+      }
+     
       refetch();
-      toast.success('la commandé a été marqué comme livré! ', {
+      toast.success('la commandé a été livré! ', {
         position: toast.POSITION.TOP_CENTER, // Placement en haut à droite
         autoClose: 5000, // Ferme automatiquement après 5 secondes
         hideProgressBar: true, // Affiche la barre de progression
@@ -65,7 +84,6 @@ const deliverHandler = async () => {
     });
   }
 }
-
   return isLoading ? (
     <Loader />
   ) : isError ? (
@@ -83,32 +101,35 @@ const deliverHandler = async () => {
                 <h2>Livraison</h2>
                 <p>
                   <strong>Nom:</strong>{" "}
-                  {data.utilisateur.prenom + " " + data.utilisateur.nom}
+                  {data.utilisateur?.prenom || "/"} {data.utilisateur?.nom || ""}
+                  
                 </p>
                 <p>
-                  <strong>Email:</strong> {data.utilisateur.email}
+                  <strong>Email:</strong> {data.utilisateur?.email || "/"}
                 </p>
                 <p>
-                  <strong>Adresse:</strong> {data.utilisateur.adresse}
+                  <strong>Adresse:</strong> {data.utilisateur?.adresse || "/"}
                 </p>
                 {data.commande.isDelivered ? (
-                  <Message variant="succes">
-                    <strong>Status:</strong> livré le:{" "}
-                    {data.commande.deliveredAt}
+                  <Message variant="success">
+                    <strong>Statut:</strong> livré le:{" "}
+                    {formatDateDeliver()}
                   </Message>
                 ) : !data.commande.isDelivered && data.commande.isPaid ? (
                   <Message variant="warning">
-                    <strong>Status:</strong> En preparation...
+                    <strong>Statut:</strong> En cours...
                   </Message>
                 ) : (
                   <Message variant="danger">
-                    <strong>Status:</strong> en attente de payement.
+                    <strong>Statut:</strong> en attente de payement.
                   </Message>
                 )}
               </ListGroup.Item>
 
+              {userInfo &&
+                  userInfo.role !== 3 && (<>
               <ListGroup.Item>
-                <h2>Methode de payement</h2>
+                <h2>Methode de paiement</h2>
                 <p>
                   <strong>Methode: </strong>
                   {data.commande.methodeDePayement}
@@ -212,15 +233,23 @@ const deliverHandler = async () => {
                   </ListGroup.Item>
                 ))}
               </ListGroup.Item>
+              </>
+              )}
+
+
             </ListGroup>
           </Col>
           <Col md={4}>
             <Card>
               <ListGroup variant="flush">
+
                 <ListGroup.Item>
                   <h2>Commande</h2>
                 </ListGroup.Item>
+                {userInfo &&
+                  userInfo.role !== 3 && (<>
                 {data.commande.premiereCommande ? (
+                  
                   <>
                     <ListGroup.Item>
                       <Row>
@@ -265,10 +294,12 @@ const deliverHandler = async () => {
                     <Col>€{total}€</Col>
                   </Row>
                 </ListGroup.Item>
+                </>
+                )}
 
                 {loadingDeliver && <Loader />}
                 {userInfo &&
-                  userInfo.role === 2 &&
+                  (userInfo.role === 2 ||userInfo.role === 3) &&
                   data.commande.isPaid &&
                   !data.commande.isDelivered && (
                     <ListGroup.Item>
@@ -277,10 +308,11 @@ const deliverHandler = async () => {
                         className="btn btn-block"
                         onClick={() => deliverHandler()}
                       >
-                        marquer livré
+                        Confirmer la livraison
                       </Button>
                     </ListGroup.Item>
-                  )}
+                  )}   
+
               </ListGroup>
             </Card>
           </Col>

@@ -35,17 +35,45 @@ const MesCommandes = () => {
                 {commandes.map((commande)=>(
                   <tr key={commande.id}>
                     <td>{commande.id}</td>
-                    <td>{commande.createdAt? commande.createdAt.substring(0, 10):""}</td>
+                    <td>
+                    {/* {commande.createdAt? commande.createdAt.substring(0, 10):""} */}
+                    {commande.createdAt
+                    ? new Date(commande.createdAt).toLocaleDateString('fr-FR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                      })
+                    : ''}
+                    </td>
                     <td>{commande.total}€</td>
                     <td>
-                    {commande.isPaid ? (commande.paidAt ? commande.paidAt.substring(0, 10) : "") : <FaTimes style={{ color: 'red' }} />}
-                      </td>
+                    {/* {commande.isPaid ? (commande.paidAt ? commande.paidAt.substring(0, 10) : "") : <FaTimes style={{ color: 'red' }} />} */}
+                    {commande.isPaid ? (
+                      commande.paidAt ? (
+                        new Date(commande.paidAt).toLocaleDateString('fr-FR', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                        })
+                      ) : (
+                        ''
+                      )
+                    ) : (
+                      <FaTimes style={{ color: 'red' }} />
+                    )}
+                    </td>
 
                       <td>
-                    {commande.isDelivered ? (
-                      commande.isDelivered ? (commande.deliveredAt ? commande.deliveredAt.substring(0, 10) : "") : <FaTimes style={{ color: 'red' }} />
+                      {commande.isDelivered ? (
+                        commande.deliveredAt
+                          ? new Date(commande.deliveredAt).toLocaleDateString('fr-FR', {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                            })
+                          : ''
                       ) : (
-                        <FaTimes style={{color: 'red'}}/>
+                        <FaTimes style={{ color: 'red' }} />
                       )}
                       </td>
                       <td>

@@ -382,7 +382,7 @@ function onApprove(data, actions) {
                 <ListGroup.Item>     
               {isPending ? <Loader /> : (
                               <div>
-                                <Button onClick={onApproveTest} style={{marginBottom: '10px'}}>Test payer commande</Button>
+                                {/* <Button onClick={onApproveTest} style={{marginBottom: '10px'}}>Test payer commande</Button> */}
                                 <div>
 
                                   <PayPalButtons 

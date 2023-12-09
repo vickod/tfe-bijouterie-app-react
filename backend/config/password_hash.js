@@ -14,3 +14,6 @@ const comparePasswords = async (password, hashedPassword) => {
 };
 
 module.exports = { hashPassword, comparePasswords };
+
+
+

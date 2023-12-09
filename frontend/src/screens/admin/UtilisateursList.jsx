@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
 import {Table, Button} from 'react-bootstrap'
-import {FaTimes, FaTrash, FaEdit, FaCheck} from 'react-icons/fa'
+import {FaTimes, FaTrash, FaEdit, FaCheck, FaBox} from 'react-icons/fa'
 import Message from '../../components/Message'
 import Loader from '../../components/Loader'
 import { useGetUtilisateursQuery, useDeleteUtilisateurMutation } from '../../slices/utilisateursSlice'
@@ -12,6 +12,9 @@ const UtilisateursList = () => {
   const [deleteUtilisateur, {isLoading: loadingDelete}] = useDeleteUtilisateurMutation();
 
   
+
+
+
   const deleteHandler = async (id) => {
     if(window.confirm('etes vous sûr de vouloir supprimer?')) {
         try {
@@ -57,9 +60,12 @@ const UtilisateursList = () => {
                 {utilisateur.roleId === 2 ? (
 
                     <FaCheck style={{color: 'green'}} />
+                ): utilisateur.roleId === 3 ? (
+                  <FaBox style={{color: 'orange'}} />
                 ): (
-                    <FaTimes style={{color: 'red'}} />
+                  <FaTimes style={{color: 'red'}} />
                 )}
+                
                 </td>
                   <td>
 
@@ -68,9 +74,15 @@ const UtilisateursList = () => {
                         <FaEdit />
                       </Button>
                     </LinkContainer>
-                    <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(utilisateur.id)}>
+                    {utilisateur.roleId !== 2 ? (
+                      <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(utilisateur.id)}>
                         <FaTrash  style={{color: 'white'}}/>
                     </Button>
+                    ): 
+                    <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(utilisateur.id)} disabled>
+                        <FaTrash  style={{color: 'white'}}/>
+                    </Button>
+                    }
                   </td>
               </tr>
             ))}

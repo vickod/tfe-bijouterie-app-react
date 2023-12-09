@@ -71,28 +71,28 @@ TypeDeMatiere.hasMany(Article)
 Article.belongsTo(TypeDeMatiere)
 
 //type de matiere - nombre de carats
-TypeDeMatiere.belongsToMany(NbCarat, { through: 'typeDeMatiereNbCarat', timestamps: false })
-NbCarat.belongsToMany(TypeDeMatiere, { through: 'typeDeMatiereNbCarat', timestamps: false })
+// TypeDeMatiere.belongsToMany(NbCarat, { through: 'typeDeMatiereNbCarat', timestamps: false })
+// NbCarat.belongsToMany(TypeDeMatiere, { through: 'typeDeMatiereNbCarat', timestamps: false })
 
 //type de matiere - couleur
-TypeDeMatiere.belongsToMany(Couleur, { through: 'typeDeMatiereCouleur' ,timestamps: false })
-Couleur.belongsToMany(TypeDeMatiere, { through: 'typeDeMatiereCouleur' ,timestamps: false })
+// TypeDeMatiere.belongsToMany(Couleur, { through: 'typeDeMatiereCouleur' ,timestamps: false })
+// Couleur.belongsToMany(TypeDeMatiere, { through: 'typeDeMatiereCouleur' ,timestamps: false })
 
 //Nombre de carats - Article
 NbCarat.hasMany(Article)
 Article.belongsTo(NbCarat)
 
 //Nombre de carats - Type de pierre 
-NbCarat.belongsToMany(TypeDePierre, { through: 'typeDePierreNbCarat' ,timestamps: false })
-TypeDePierre.belongsToMany(NbCarat, { through: 'typeDePierreNbCarat' ,timestamps: false })
+// NbCarat.belongsToMany(TypeDePierre, { through: 'typeDePierreNbCarat' ,timestamps: false })
+// TypeDePierre.belongsToMany(NbCarat, { through: 'typeDePierreNbCarat' ,timestamps: false })
 
 //Type de pierre - Couleur
 TypeDePierre.belongsToMany(Couleur, { through: 'typeDePierreCouleur' ,timestamps: false })
 Couleur.belongsToMany(TypeDePierre, { through: 'typeDePierreCouleur' ,timestamps: false })
 
 //Couleur - Article
-Article.belongsToMany(Couleur, { through: 'articleCouleur' ,timestamps: false })
-Couleur.belongsToMany(Article, { through: 'articleCouleur' ,timestamps: false })
+// Article.belongsToMany(Couleur, { through: 'articleCouleur' ,timestamps: false })
+// Couleur.belongsToMany(Article, { through: 'articleCouleur' ,timestamps: false })
 
 //Type de perle - Couleur
 TypeDePerle.belongsToMany(Couleur, { through: 'typeDePerleCouleur' ,timestamps: false })
@@ -102,11 +102,11 @@ Couleur.belongsToMany(TypeDePerle, { through: 'typeDePerleCouleur' ,timestamps: 
 Article.hasMany(ArticleAvecPierre);
 TypeDePierre.hasMany(ArticleAvecPierre);
 Couleur.hasMany(ArticleAvecPierre);
-NbCarat.hasMany(ArticleAvecPierre);
+//NbCarat.hasMany(ArticleAvecPierre);
 ArticleAvecPierre.belongsTo(TypeDePierre)
 ArticleAvecPierre.belongsTo(Article)
 ArticleAvecPierre.belongsTo(Couleur)
-ArticleAvecPierre.belongsTo(NbCarat)
+//ArticleAvecPierre.belongsTo(NbCarat)
 
 //N-AIR: GuideDeTailleArticle: article - taille - mesure  
 Article.hasMany(GuideDeTailleArticle);

@@ -36,7 +36,7 @@ const Utilisateur = sequelize.define('utilisateur',{
         allowNull: false
     },
 
-},{timestamps: false})
+},{timestamps: true})
 module.exports = Utilisateur;
 
 

@@ -9,7 +9,7 @@ const Mesure = sequelize.define('mesure', {
     },
     mesure: {
         type: Sequelize.STRING,
-        allowNull: true
+        allowNull: false,
     }
     
 },{timestamps: false})

@@ -60,7 +60,10 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         role: "client",
     });
     const manager = await Role.create({
-        role: "manager",
+        role: "admin",
+    });
+    const livreur = await Role.create({
+        role: "livreur",
     });
     //Creation des Utilisateurs
     
@@ -69,16 +72,16 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         prenom: "pierre",
         email:"pierre@mail.com",
         telephone: "0499568322",
-        adresse: "chaussée de wavre 40",
+        adresse: "chaussée de wavre 40, 1080 bruxelles",
         password: await hashPassword("password"),
         roleId: client.id
     });
     const victor = await Utilisateur.create({
         nom: "Tor",
         prenom: "Vick",
-        email:"victor@mail.com",
+        email:"manager.vbijouterie@outlook.com",
         telephone: "0483245599",
-        adresse: "avenue de l'elite 33",
+        adresse: "avenue de l'elite 33, 1000 Bruxelles",
         password: await hashPassword("password"),
         roleId: manager.id
     });
@@ -87,7 +90,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         prenom: "alice",
         email:"alice@mail.com",
         telephone: "0493227748",
-        adresse: "rue des arts 12",
+        adresse: "rue des arts 12, 5000 Namur",
         password: await hashPassword("password"),
         roleId: client.id
     });
@@ -96,7 +99,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         prenom: "naceur",
         email:"benkeder@mail.com",
         telephone: "0485908734",
-        adresse: "rue de marie 109",
+        adresse: "rue de la ville 109, 1730 asse",
         password: await hashPassword("password"),
         roleId: client.id
     });
@@ -105,7 +108,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         prenom: "celine",
         email:"celine@mail.com",
         telephone: "0466893455",
-        adresse: "rue de la ville 56",
+        adresse: "rue de la ville 56, 1730 asse",
         password: await hashPassword("password"),
         roleId: client.id
     });
@@ -114,18 +117,18 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         prenom: "Marie",
         email:"marie@mail.com",
         telephone: "0479335599",
-        adresse: "avenue de la paix 500",
+        adresse: "avenue de la paix 500, 1000 bruxelles",
         password: await hashPassword("password"),
         roleId: client.id
     });
     const jean = await Utilisateur.create({
         nom: "lemans",
         prenom: "Jean",
-        email:"jean@mail.com",
+        email:"livreur.vbijouterie@outlook.com",
         telephone: "0475225575",
-        adresse: "rue saint-pierre 60",
+        adresse: "rue saint-pierre 60, 1090 Bruxelles",
         password: await hashPassword("password"),
-        roleId: client.id
+        roleId: livreur.id
     });
 
     // creation de couleur
@@ -182,33 +185,33 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
     const or9 = await NbCarat.create({
         valeur: "375/9 ct",
     });
-    const diamantCt06 = await NbCarat.create({
-        valeur: "Diamant/0.06 ct ",
-    });
-    const diamantCt15 = await NbCarat.create({
-        valeur: "Diamant/0.15 ct ",
-    });
-    const diamantCt09 = await NbCarat.create({
-        valeur: "Diamant/0.09 ct ",
-    });
-    const diamantCt05 = await NbCarat.create({
-        valeur: "Diamant/0.05 ct ",
-    });
-    const diamantCt40 = await NbCarat.create({
-        valeur: "Diamant/0.40 ct ",
-    });
-    const diamantCt57 = await NbCarat.create({
-        valeur: "Diamant/0.57 ct ",
-    });
-    const diamantCt30 = await NbCarat.create({
-        valeur: "Diamant/0.30 ct ",
-    });
-    const diamantCt28 = await NbCarat.create({
-        valeur: "Diamant/0.28 ct ",
-    });
-    const diamantCt08 = await NbCarat.create({
-        valeur: "Diamant/0.08 ct ",
-    });
+    // const diamantCt06 = await NbCarat.create({
+    //     valeur: "0.06",
+    // });
+    // const diamantCt15 = await NbCarat.create({
+    //     valeur: "0.15",
+    // });
+    // const diamantCt09 = await NbCarat.create({
+    //     valeur: "0.09",
+    // });
+    // const diamantCt05 = await NbCarat.create({
+    //     valeur: "0.05",
+    // });
+    // const diamantCt40 = await NbCarat.create({
+    //     valeur: "0.40",
+    // });
+    // const diamantCt57 = await NbCarat.create({
+    //     valeur: "0.57",
+    // });
+    // const diamantCt30 = await NbCarat.create({
+    //     valeur: "0.30",
+    // });
+    // const diamantCt28 = await NbCarat.create({
+    //     valeur: "0.28",
+    // });
+    // const diamantCt08 = await NbCarat.create({
+    //     valeur: "0.08",
+    // });
 
    
     const argent = await TypeDeMatiere.create({
@@ -229,19 +232,19 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
     
 
     
-    await orRouge.addNbCarat(or9)
-    await orRouge.addNbCarat(or14)
-    await orRouge.addNbCarat(or18)
-    await orJaune.addNbCarat(or9)
-    await orJaune.addNbCarat(or14)
-    await orJaune.addNbCarat(or18)
-    await orRose.addNbCarat(or9)
-    await orRose.addNbCarat(or14)
-    await orRose.addNbCarat(or18)
-    await orBlanc.addNbCarat(or9)
-    await orBlanc.addNbCarat(or14)
-    await orBlanc.addNbCarat(or18)
-    await argent.addNbCarat(arg)
+    // await orRouge.addNbCarat(or9)
+    // await orRouge.addNbCarat(or14)
+    // await orRouge.addNbCarat(or18)
+    // await orJaune.addNbCarat(or9)
+    // await orJaune.addNbCarat(or14)
+    // await orJaune.addNbCarat(or18)
+    // await orRose.addNbCarat(or9)
+    // await orRose.addNbCarat(or14)
+    // await orRose.addNbCarat(or18)
+    // await orBlanc.addNbCarat(or9)
+    // await orBlanc.addNbCarat(or14)
+    // await orBlanc.addNbCarat(or18)
+    // await argent.addNbCarat(arg)
    
 
      //Creations de Type de perle 
@@ -286,15 +289,15 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
     await emraude.addCouleur(vert)
     await rubis.addCouleur(roseTransparent)
     // type de pierre - nb carats
-    await diamant.addNbCarat(diamantCt06)
-    await diamant.addNbCarat(diamantCt15)
-    await diamant.addNbCarat(diamantCt09)
-    await diamant.addNbCarat(diamantCt05)
-    await diamant.addNbCarat(diamantCt08)
-    await diamant.addNbCarat(diamantCt28)
-    await diamant.addNbCarat(diamantCt30)
-    await diamant.addNbCarat(diamantCt40)
-    await diamant.addNbCarat(diamantCt57)
+    // await diamant.addNbCarat(diamantCt06)
+    // await diamant.addNbCarat(diamantCt15)
+    // await diamant.addNbCarat(diamantCt09)
+    // await diamant.addNbCarat(diamantCt05)
+    // await diamant.addNbCarat(diamantCt08)
+    // await diamant.addNbCarat(diamantCt28)
+    // await diamant.addNbCarat(diamantCt30)
+    // await diamant.addNbCarat(diamantCt40)
+    // await diamant.addNbCarat(diamantCt57)
     
     const imageBaseUrl = `/img/articles/`;
 
@@ -303,6 +306,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Bague Argent Zircone",
         prix: 415.00,
         message:"Argent noble avec poinçon 925",
+        type: "anneau",
         image: `${imageBaseUrl}601705.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -313,6 +317,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Bague à superposer Argent Rhodié",
         prix: 29.00,
         message:"Argent noble avec poinçon 925",
+        type: "anneau",
         image: `${imageBaseUrl}567940.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -323,6 +328,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Bague solitaire Argent",
         prix: 59.00,
         message:"Argent noble avec poinçon 925",
+        type: "solitaire",
         image: `${imageBaseUrl}524252.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -333,6 +339,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Bague solitaire Or rose 750/18 K Diamant 0.06 ct",
         prix: 695.00,
         message:"Or noble avec poinçon 750",
+        type: "solitaire",
         image: `${imageBaseUrl}565946.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -343,6 +350,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Bague Or rose 750/18 K Quartz rose",
         prix: 630.00,
         message:"Or noble avec poinçon 750",
+        type: "solitaire",
         image: `${imageBaseUrl}565863.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -353,6 +361,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Bague solitaire Or rose 585/14 K Diamant 0.15 ct",
         prix: 960.00,
         message:"Or noble avec poinçon 585",
+        type: "solitaire",
         image: `${imageBaseUrl}570601.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -363,6 +372,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Bague Or jaune 750/18 K Zircone",
         prix: 344.00,
         message:"Or noble avec poinçon 750",
+        type: "trilogie",
         image: `${imageBaseUrl}549977.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -373,6 +383,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Bague à superposer Or jaune 750/18 K",
         prix: 198.00,
         message:"Or noble avec poinçon 750",
+        type: "anneau",
         image: `${imageBaseUrl}584222.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -383,6 +394,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Bague Or blanc 585/14 K Émeraude",
         prix: 680.00,
         message:"Or noble avec poinçon 585",
+        type: "trilogie",
         image: `${imageBaseUrl}591967.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -393,6 +405,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Bague à superposer Or blanc 585/14 K",
         prix: 249.00,
         message:"Or noble avec poinçon 585",
+        type: "anneau",
         image: `${imageBaseUrl}591934.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -403,6 +416,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "La Radieuse, ALLIANCE - OR BLANC 18 CARATS - DIAMANT",
         prix: 2540.00,
         message:"Or noble avec poinçon 750",
+        type: "alliance",
         image: `${imageBaseUrl}3493493.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -413,6 +427,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "La Belle, Alliance or jaune 18 carats semi pavée - serti rail - Diamant",
         prix: 1610.00,
         message:"Or noble avec poinçon 750",
+        type: "alliance",
         image: `${imageBaseUrl}3483468.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -423,6 +438,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Amoureuse, Alliance avec Diamant - or blanc 18 carats",
         prix: 2610.00,
         message:"Or noble avec poinçon 750",
+        type: "alliance",
         image: `${imageBaseUrl}3523525.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -433,6 +449,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "La Destinée - 71 diamants - or rose 18 carats",
         prix: 2810.00,
         message:"Or noble avec poinçon 750",
+        type: "alliance",
         image: `${imageBaseUrl}232354235.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -443,6 +460,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "La tombeuse, ALLIANCE - or jaune 18 carats",
         prix: 480.00,
         message:"Or noble avec poinçon 750",
+        type: "alliance",
         image: `${imageBaseUrl}34534534.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 2,
@@ -454,6 +472,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Bague en or avec diamant",
         prix: 690.00,
         message:"Or noble avec poinçon 750",
+        type: "moderne",
         image: `${imageBaseUrl}337833.jpg`, 
         categorieId: categorieBagues.id,
         selectionId: 1,
@@ -464,6 +483,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Bague homme argent à graver",
         prix: 229.00,
         message:"Argent noble avec poinçon 925",
+        type: "chevaliere",
         image: `${imageBaseUrl}331920.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 1,
@@ -474,6 +494,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Bague en or gris avec zirconia",
         prix: 980.00,
         message:"Or noble avec poinçon 750",
+        type: "moderne",
         image: `${imageBaseUrl}331278.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 1,
@@ -484,6 +505,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Chevalière or 375 avec diamant",
         prix: 329.00,
         message:"Or noble avec poinçon 375",
+        type: "chevaliere",
         image: `${imageBaseUrl}331296.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 1,
@@ -494,6 +516,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Le Radieux, ALLIANCE - OR BLANC 18 CARATS - DIAMANT ",
         prix: 1070.00,
         message:"Or noble avec poinçon 750",
+        type: "alliance",
         image: `${imageBaseUrl}124124.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 1,
@@ -504,6 +527,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Le Beau, ALLIANCE - OR JAUNE 18 CARATS ",
         prix: 820.00,
         message:"Or noble avec poinçon 750",
+        type: "alliance",
         image: `${imageBaseUrl}3233242366.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 1,
@@ -514,6 +538,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Amoureux, ALLIANCE - OR BLANC 18 CARATS ",
         prix: 1140.00,
         message:"Or noble avec poinçon 750",
+        type: "alliance",
         image: `${imageBaseUrl}686868.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 1,
@@ -524,6 +549,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Le Destiné, ALLIANCE - OR ROSE 18 CARATS ",
         prix: 1140.00,
         message:"Or noble avec poinçon 750",
+        type: "alliance",
         image: `${imageBaseUrl}657464.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 1,
@@ -534,6 +560,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Le Tombeur, ALLIANCE - OR JAUNE 18 CARATS ",
         prix: 490.00,
         message:"Or noble avec poinçon 750",
+        type: "alliance",
         image: `${imageBaseUrl}454463.jpg`,
         categorieId: categorieBagues.id,
         selectionId: 1,
@@ -545,6 +572,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Chaînette avec pendentif Argent Zircone Rhodié Coeur",
         prix: 79.00,
         message:"Argent noble avec poinçon 925",
+        type: "chainette",
         image: `${imageBaseUrl}602041.jpg`,
         categorieId: categorieCollier.id,
         selectionId: 2,
@@ -555,6 +583,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Chaînette Argent Rhodié",
         prix: 59.00,
         message:"Argent noble avec poinçon 925",
+        type: "chainette",
         image: `${imageBaseUrl}599824.jpg`,
         categorieId: categorieCollier.id,
         selectionId: 2,
@@ -565,6 +594,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Collier Argent Rhodié perle d'eau douce",
         prix: 134.00,
         message:"Argent noble avec poinçon 925",
+        type: "collier",
         image: `${imageBaseUrl}569388.jpg`,
         categorieId: categorieCollier.id,
         selectionId: 2,
@@ -575,6 +605,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Collier Or blanc 585/14 K Aigue-Marine",
         prix: 620.00,
         message:"Or noble avec poinçon 585",
+        type: "collier",
         image: `${imageBaseUrl}592277.jpg`,
         categorieId: categorieCollier.id,
         selectionId: 2,
@@ -585,6 +616,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Collier Or blanc 750/18 K Diamant 0.09 ct perle de Tahiti",
         prix: 690.00,
         message:"Or noble avec poinçon 750",
+        type: "collier",
         image: `${imageBaseUrl}570702.jpg`,
         categorieId: categorieCollier.id,
         selectionId: 2,
@@ -595,6 +627,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Collier Or rouge 750/18 K Rubis",
         prix: 360.00,
         message:"Or noble avec poinçon 750",
+        type: "collier",
         image: `${imageBaseUrl}601561.jpg`,
         categorieId: categorieCollier.id,
         selectionId: 2,
@@ -606,6 +639,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Chaînette Or jaune 585/14 K",
         prix: 598.00,
         message:"Or noble avec poinçon 585",
+        type: "chainette",
         image: `${imageBaseUrl}554701.jpg`,
         categorieId: categorieCollier.id,
         selectionId: 1,
@@ -616,6 +650,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Collier or rose 750",
         prix: 289.00,
         message:"Or noble avec poinçon 750",
+        type: "collier",
         image: `${imageBaseUrl}362119.jpg`,
         categorieId: categorieCollier.id,
         selectionId: 1,
@@ -626,6 +661,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Chaine Argent",
         prix: 124.00,
         message:"Argent noble avec poinçon 925",
+        type: "chaine",
         image: `${imageBaseUrl}526202.jpg`,
         categorieId: categorieCollier.id,
         selectionId: 1,
@@ -637,6 +673,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Clous d'oreilles Argent Zircone Rhodié",
         prix: 49.00,
         message:"Argent noble avec poinçon 925",
+        type: "clous d'oreilles",
         image: `${imageBaseUrl}596094.jpg`,
         categorieId: categorieBouclesDoreilles.id,
         selectionId: 2,
@@ -647,6 +684,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Pendant d'oreilles Or blanc 750/18 K Diamant 0.08 ct perle d'eau douce",
         prix: 590.00,
         message:"Or noble avec poinçon 750",
+        type: "pendant d'oreilles",
         image: `${imageBaseUrl}588053.jpg`,
         categorieId: categorieBouclesDoreilles.id,
         selectionId: 2,
@@ -657,6 +695,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Clous d'oreilles Or blanc 750/18 K Saphir",
         prix: 298.00,
         message:"Or noble avec poinçon 750",
+        type: "clous d'oreilles",
         image: `${imageBaseUrl}601560.jpg`,
         categorieId: categorieBouclesDoreilles.id,
         selectionId: 2,
@@ -667,6 +706,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Clous d'oreilles Or jaune 585/14 K",
         prix: 94.00,
         message:"Or noble avec poinçon 585",
+        type: "clous d'oreilles",
         image: `${imageBaseUrl}https://www.rhomberg.be/fr/detail/clous-d-oreilles-or-jaune-585-14-k-595772.html?cat=17358`,
         categorieId: categorieBouclesDoreilles.id,
         selectionId: 2,
@@ -677,6 +717,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Créoles Or jaune 585/14 K",
         prix: 330.00,
         message:"Or noble avec poinçon 585",
+        type: "creoles",
         image: `${imageBaseUrl}591916.jpg`,
         categorieId: categorieBouclesDoreilles.id,
         selectionId: 2,
@@ -687,6 +728,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Clous d'oreilles Or jaune 750/18 K perle d'eau douce",
         prix: 298.00,
         message:"Or noble avec poinçon 750",
+        type: "clous d'oreilles",
         image: `${imageBaseUrl}593698.jpg`,
         categorieId: categorieBouclesDoreilles.id,
         selectionId: 2,
@@ -697,6 +739,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Clous d'oreilles Argent Rhodié perle d'eau douce",
         prix: 19.00,
         message:"Argent noble avec poinçon 925",
+        type: "clous d'oreilles",
         image: `${imageBaseUrl}223708.jpg`,
         categorieId: categorieBouclesDoreilles.id,
         selectionId: 2,
@@ -707,6 +750,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Créoles or 750",
         prix: 529.00,
         message:"Or noble avec poinçon 750",
+        type: "creoles",
         image: `${imageBaseUrl}357353.jpg`,
         categorieId: categorieBouclesDoreilles.id,
         selectionId: 2,
@@ -717,6 +761,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nom: "Clous d'oreilles Or blanc 750/18 K perle de Tahiti",
         prix: 360.00,
         message:"Or noble avec poinçon 750",
+        type: "clous d'oreilles",
         image: `${imageBaseUrl}554564.jpg`,
         categorieId: categorieBouclesDoreilles.id,
         selectionId: 2,
@@ -724,50 +769,6 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         nbCaratId: or18.id
     });
     
-
-    // article - couleur
-    articleFemmeBague1.addCouleur(silver)
-    articleFemmeBague2.addCouleur(silver)
-    articleFemmeBague3.addCouleur(silver)
-    articleFemmeBague4.addCouleur(rose)
-    articleFemmeBague5.addCouleur(rose)
-    articleFemmeBague6.addCouleur(rose)
-    articleFemmeBague7.addCouleur(jaune)
-    articleFemmeBague8.addCouleur(jaune)
-    articleFemmeBague9.addCouleur(silver)
-    articleFemmeBague10.addCouleur(silver)
-    articleFemmeAlliance1.addCouleur(silver)
-    articleFemmeAlliance2.addCouleur(jaune)
-    articleFemmeAlliance3.addCouleur(silver)
-    articleFemmeAlliance4.addCouleur(rose)
-    articleFemmeAlliance5.addCouleur(jaune)
-    articleFemmeCollier1.addCouleur(silver)
-    articleFemmeCollier2.addCouleur(silver)
-    articleFemmeCollier3.addCouleur(blanc)
-    articleFemmeCollier4.addCouleur(silver)
-    articleFemmeCollier5.addCouleur(silver)
-    articleFemmeCollier6.addCouleur(rouge)
-    articleHommeBague1.addCouleur(jaune)
-    articleHommeBague2.addCouleur(silver)
-    articleHommeBague3.addCouleur(silver)
-    articleHommeBague4.addCouleur(jaune)
-    articleHommeAlliance1.addCouleur(silver)
-    articleHommeAlliance2.addCouleur(jaune)
-    articleHommeAlliance3.addCouleur(silver)
-    articleHommeAlliance4.addCouleur(rose)
-    articleHommeAlliance5.addCouleur(jaune)
-    articleHommeCollier1.addCouleur(jaune)
-    articleHommeCollier2.addCouleur(rose)
-    articleHommeCollier3.addCouleur(silver)
-    articleBoucleDoreillesFemme1.addCouleur(silver)
-    articleBoucleDoreillesFemme2.addCouleur(silver)
-    articleBoucleDoreillesFemme3.addCouleur(silver)
-    articleBoucleDoreillesFemme4.addCouleur(jaune)
-    articleBoucleDoreillesFemme5.addCouleur(jaune)
-    articleBoucleDoreillesFemme6.addCouleur(jaune)
-    articleBoucleDoreillesFemme7.addCouleur(silver)
-    articleBoucleDoreillesFemme8.addCouleur(jaune)
-    articleBoucleDoreillesFemme9.addCouleur(silver)
 
 
 
@@ -778,6 +779,7 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         articleId: articleFemmeBague1.id,
         typeDePierreId: zircone.id,
         couleurId: blancTransparent.id
+        //nbCarats: "38",
     });
     const bagueFemmeAvecPierres2 = await ArticleAvecPierre.create({
         nbPierres: "1",
@@ -790,7 +792,8 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         articleId: articleFemmeBague4.id,
         typeDePierreId: diamant.id,
         couleurId: blancTransparent.id,
-        nbCaratId: diamantCt06.id
+        nbCarats: 0.06,
+        //nbCaratId: diamantCt06.id
     });
     const bagueFemmeAvecPierres4 = await ArticleAvecPierre.create({
         nbPierres: "1",
@@ -803,7 +806,8 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         articleId: articleFemmeBague6.id,
         typeDePierreId: diamant.id,
         couleurId: blancTransparent.id,
-        nbCaratId: diamantCt15.id
+        nbCarats: 0.15,
+        //nbCaratId: diamantCt15.id
     });
     const bagueFemmeAvecPierres6 = await ArticleAvecPierre.create({
         nbPierres: "3",
@@ -822,35 +826,40 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         articleId: articleFemmeAlliance1.id,
         typeDePierreId: diamant.id,
         couleurId: blancTransparent.id,
-        nbCaratId: diamantCt57.id
+        nbCarats: 0.57,
+        //nbCaratId: diamantCt57.id
     });
     const bagueFemmeAvecPierres9 = await ArticleAvecPierre.create({
         nbPierres: "10",
         articleId: articleFemmeAlliance2.id,
         typeDePierreId: diamant.id,
         couleurId: blancTransparent.id,
-        nbCaratId: diamantCt30.id
+        nbCarats: 0.3,
+        //nbCaratId: diamantCt30.id
     });
     const bagueFemmeAvecPierres10 = await ArticleAvecPierre.create({
         nbPierres: "29",
         articleId: articleFemmeAlliance3.id,
         typeDePierreId: diamant.id,
         couleurId: blancTransparent.id,
-        nbCaratId: diamantCt30.id
+        nbCarats: 0.3,
+        //nbCaratId: diamantCt30.id
     });
     const bagueFemmeAvecPierres11 = await ArticleAvecPierre.create({
         nbPierres: "71",
         articleId: articleFemmeAlliance4.id,
         typeDePierreId: diamant.id,
         couleurId: blancTransparent.id,
-        nbCaratId: diamantCt28.id
+        nbCarats: 0.28,
+        //nbCaratId: diamantCt28.id
     });
     const bagueHommeAvecPierres1 = await ArticleAvecPierre.create({
         nbPierres: "1",
         articleId: articleHommeBague1.id,
         typeDePierreId: diamant.id,
         couleurId: blancTransparent.id,
-        nbCaratId: diamantCt05.id
+        nbCarats: 0.5,
+        //nbCaratId: diamantCt05.id
     });
     const bagueHommeAvecPierres2 = await ArticleAvecPierre.create({
         nbPierres: "1",
@@ -864,14 +873,16 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         articleId: articleHommeBague4.id,
         typeDePierreId: diamant.id,
         couleurId: blancTransparent.id,
-        nbCaratId: diamantCt05.id
+        nbCarats: 0.05,
+        //nbCaratId: diamantCt05.id
     });
     const bagueHommeAvecPierres4 = await ArticleAvecPierre.create({
         nbPierres: "1",
         articleId: articleHommeAlliance1.id,
         typeDePierreId: diamant.id,
         couleurId: blancTransparent.id,
-        nbCaratId: diamantCt08.id
+        nbCarats: 0.08,
+        //nbCaratId: diamantCt08.id
     });
     const collierFemmeAvecPierres1 = await ArticleAvecPierre.create({
         nbPierres: "21",
@@ -890,7 +901,8 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         articleId: articleFemmeCollier5.id,
         typeDePierreId: diamant.id,
         couleurId: blancTransparent.id,
-        nbCaratId: diamantCt09.id
+        nbCarats: 0.09,
+        //nbCaratId: diamantCt09.id
     });
     const collierFemmeAvecPierres4 = await ArticleAvecPierre.create({
         nbPierres: "1",
@@ -911,7 +923,8 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         articleId: articleBoucleDoreillesFemme2.id,
         typeDePierreId: diamant.id,
         couleurId: blancTransparent.id,
-        nbCaratId: diamantCt08.id
+        nbCarats: 0.08,
+        //nbCaratId: diamantCt08.id
     });
     const bouclesDoreillesFemmeAvecPierres3 = await ArticleAvecPierre.create({
         nbPierres: "2",
@@ -1008,13 +1021,13 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         taille: "45"
     })
     const tailleCollier50 = await Taille.create({
-        taille: "50"
+        taille: "51"
     })
     const tailleCollier55 = await Taille.create({
         taille: "55"
     })
     const tailleCollier60 = await Taille.create({
-        taille: "60"
+        taille: "61"
     })
     const tailleUnique = await Taille.create({
         taille: "taille unique"
@@ -1027,12 +1040,12 @@ const { hashPassword, comparePasswords } = require('../config/password_hash');
         tailleId: tailleBague48.id
     })
     const articleTaille2 = await ArticleTaille.create({
-        stock: "17",
+        stock: "5",
         articleId: articleFemmeBague1.id,
         tailleId: tailleBague50.id
     })
     const articleTaille3 = await ArticleTaille.create({
-        stock: "10",
+        stock: "1",
         articleId: articleFemmeBague1.id,
         tailleId: tailleBague52.id
     })

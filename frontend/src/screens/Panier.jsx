@@ -106,18 +106,18 @@ const Panier = () => {
                 {articlesDuPanier.reduce((acc, item) => acc + item.qty, 0)})
                 articles
               </h2>
-              <Col>
+              {/* <Col>
                Prix HTVA: €{" "}
               {articlesDuPanier
                   .reduce((acc, item) => (acc + item.qty * item.prix)/1.21, 0)
                   .toFixed(2)}
-              </Col>
-              <Col>
+              </Col> */}
+              {/* <Col>
                + TVA 21%: €{" "}
               {articlesDuPanier
                   .reduce((acc, item) => (acc + item.qty * item.prix)-(acc + item.qty * item.prix)/1.21, 0)
                   .toFixed(2)}
-              </Col>
+              </Col> */}
               
               <Col>
                 <strong>Total: €{" "}

@@ -6,7 +6,9 @@ const db_connection = require('./config/db_connection');
 const articlesRoutes = require('./routes/articlesRoutes')
 const utilisateurRoutes = require('./routes/utilisateurRoutes')
 const commandesRoutes = require('./routes/commandeRoute')
+const livraisonRoutes = require('./routes/livraisonRoutes')
 const reduxTestRoutes = require('./routes/reduxTestRoute')
+const forgotPasswordRoute = require('./routes/forgotPasswordRoute')
 const app = express();
 const {notFound, errorHandler} = require('./middleware/errorMiddleware');
 const cors = require('cors');
@@ -38,6 +40,13 @@ app.use('/api/test', reduxTestRoutes)
 
 app.get('/api/config/paypal', (req,res) => 
 res.send({clientId: process.env.PAYPAL_CLIENT_ID}))
+
+//routes livraison
+app.use('/api/livraison', livraisonRoutes)
+
+//routes forgot password
+app.use('/api/forgot', forgotPasswordRoute)
+
 
 __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));

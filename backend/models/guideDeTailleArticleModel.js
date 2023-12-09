@@ -9,11 +9,11 @@ const GuideDeTailleArticle = sequelize.define('guideDeTailleArticle', {
     },
     valeur_mesure: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     },
     unite_mesure: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     } 
 },{timestamps: false})
 module.exports = GuideDeTailleArticle

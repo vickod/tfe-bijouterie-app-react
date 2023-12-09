@@ -10,9 +10,8 @@ import { useGetCommandesQuery } from '../../slices/commandesApiSlice'
 const CommandesList = () => {
   const {data, isLoading, error} = useGetCommandesQuery();
   
+  
  
-
-
 
   return (
     <>
@@ -49,21 +48,35 @@ const CommandesList = () => {
                   )?.prenom || "Utilisateur inconnu"}
                 </td>
                 <td>
-                  {commande.createdAt.substring(0, 10)}
+                {commande.createdAt
+                ? new Date(commande.createdAt).toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                  })
+                : ''}
                 </td>
                 <td>
                   {commande.total}€
                 </td>
                 <td>
                 {commande.isPaid ? (
-                  commande.paidAt.substring(0,10)
+                  new Date(commande.paidAt).toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                  })
                 ) : (
                   <FaTimes style={{color: 'red'}} />
                 )}
                 </td>
                 <td>
                 {commande.isDelivered ? (
-                  commande.deliveredAt.substring(0,10)
+                  new Date(commande.deliveredAt).toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                  })
                 ) : (
                   <FaTimes style={{color: 'red'}} />
                 )}

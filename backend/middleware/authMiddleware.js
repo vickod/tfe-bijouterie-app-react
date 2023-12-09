@@ -27,6 +27,16 @@ const protect = asyncHandler(async(req, res, next) => {
     }
 })
 
+//CLIENT 
+const client = (req, res, next) => {
+    if(req.utilisateur && req.utilisateur.roleId ===1){
+        next();
+    }else{
+        res.status(401);
+        throw new Error("'Vous n'etes pas autoriser, not client")
+    }
+}
+
 //ADMIN 
 const admin = (req, res, next) => {
     if(req.utilisateur && req.utilisateur.roleId ===2){
@@ -37,4 +47,13 @@ const admin = (req, res, next) => {
     }
 }
 
-module.exports = {protect, admin}
+const livreur = (req, res, next) => {
+    if(req.utilisateur && req.utilisateur.roleId ===3){
+        next();
+    }else{
+        res.status(401);
+        throw new Error("'Vous n'etes pas autoriser, not livreur")
+    }
+}
+
+module.exports = {protect, admin, client, livreur}

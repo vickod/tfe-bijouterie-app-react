@@ -50,6 +50,38 @@ export const articlesApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['Article'],
         }),
+        modifPierre: builder.mutation({
+            query: (data) => ({
+                url: `${ARTICLES_URL}/${data.id}/modifPierre`,
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: ['Article'],
+        }),
+        modifPerle: builder.mutation({
+            query: (data) => ({
+                url: `${ARTICLES_URL}/${data.id}/modifPerle`,
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: ['Article'],
+        }),
+        suppressionPierre: builder.mutation({
+            query: (data) => ({
+                url: `${ARTICLES_URL}/${data.id}/deletePierre`,
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: ['Article'],
+        }),
+        suppressionPerle: builder.mutation({
+            query: (data) => ({
+                url: `${ARTICLES_URL}/${data.id}/deletePerle`,
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: ['Article'],
+        }),
         uploadImagesArticles: builder.mutation({
             query: (data) => ({
                 url: `${UPLOAD_URL}`,
@@ -74,5 +106,10 @@ export const {useGetArticlesQuery,
     useSuppressionTailleMutation,
     useModifStockMutation,
     useUploadImagesArticlesMutation,
-    useDeleteArticleMutation
+    useDeleteArticleMutation,
+    useModifPierreMutation,
+    useModifPerleMutation,
+    useSuppressionPerleMutation,
+    useSuppressionPierreMutation
 } = articlesApiSlice; // genere le hook pour fetch la data
+

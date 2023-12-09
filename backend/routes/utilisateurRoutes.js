@@ -11,11 +11,7 @@ const {authUser,
     getUserById,
 
 } = require('../controllers/utilisateur.Controllers');
-const {protect, admin} = require('../middleware/authMiddleware');
-
-
-
-
+const {protect, client, admin} = require('../middleware/authMiddleware');
 
 
 
@@ -29,16 +25,13 @@ const {protect, admin} = require('../middleware/authMiddleware');
 
 
     router.route('/profile')
-    .get(protect,getUserProfile)
-    .put(protect,updateUserProfile);
+    .get(protect, client, getUserProfile)
+    .put(protect, client, updateUserProfile);
 
     router.route('/:id')
     .delete(protect, admin, deleteUser)
     .get(protect, admin, getUserById)
     .put(protect, admin, updateUser)
-
-
-  
 
 
 

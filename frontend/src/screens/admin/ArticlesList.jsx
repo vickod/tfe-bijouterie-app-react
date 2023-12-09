@@ -1,7 +1,7 @@
 import React from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
 import {Table, Button, Row, Col} from 'react-bootstrap'
-import {FaTimes, FaEdit, FaTrash} from 'react-icons/fa'
+import {FaTimes, FaEdit, FaTrash, FaExclamationTriangle} from 'react-icons/fa'
 import Message from '../../components/Message'
 import Loader from '../../components/Loader'
 import { useGetArticlesQuery, useCreateArticleMutation, useDeleteArticleMutation } from '../../slices/articlesApiSlice'
@@ -43,7 +43,8 @@ const createArticleHandler = async () => {
         }
     }
 }
-
+// const stock = data? data.articlesTailles.filter(article => article.stock<5) : ""
+// console.log(stock)
     return (
         <>
             <Row className='align-items-center'>
@@ -79,7 +80,11 @@ const createArticleHandler = async () => {
                             {data.articles.map((article) => (
                                 <tr key={article.id}>
                                     <td>{article.id}</td>
-                                    <td>{article.nom}</td>
+                                    <td>{article.nom}{ data && data.articlesTailles.find(item => item.stock===0 && item.articleId === article.id) ? (
+                                        <strong style={{color: 'red'}}>{" "}<FaExclamationTriangle /></strong>
+                                    ):data && data.articlesTailles.find(item => item.stock<5 && item.stock>0 && item.articleId === article.id) ? (
+                                        <strong style={{color: 'orange'}}>{" "}<FaExclamationTriangle /></strong>
+                                    ):"" }</td>
                                     <td>{article.prix}€</td>
                                     {data.categories.map((categorie, index) => (
                                         categorie.id === article.categorieId  && (
@@ -112,3 +117,4 @@ const createArticleHandler = async () => {
 }
 
 export default ArticlesList
+
